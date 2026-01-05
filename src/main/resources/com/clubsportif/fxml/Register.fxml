@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+
+<BorderPane prefHeight="650.0" prefWidth="800.0" stylesheets="@../css/styles.css" xmlns:fx="http://javafx.com/fxml" xmlns="http://javafx.com/javafx/21" fx:controller="com.clubsportif.controller.RegisterController">
+
+    <center>
+        <VBox alignment="CENTER" spacing="18" maxWidth="450" styleClass="card login-card">
+            <padding>
+                <Insets bottom="40" left="40" right="40" top="40" />
+            </padding>
+
+            <Label text="ClubMe" styleClass="logo-title"/>
+
+            <VBox spacing="14">
+                <TextField fx:id="usernameField" promptText="Username" styleClass="text-field"/>
+
+                <TextField fx:id="emailField" promptText="Email" styleClass="text-field"/>
+
+                <TextField fx:id="phoneField" promptText="Phone" styleClass="text-field"/>
+
+                <PasswordField fx:id="passwordField" promptText="Password" styleClass="password-field"/>
+
+                <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password" styleClass="password-field"/>
+            </VBox>
+
+            <Button text="Register" onAction="#register" maxWidth="Infinity" styleClass="button-primary"/>
+
+            <Button text="Back to Login" onAction="#goToLogin" styleClass="button-ghost"/>
+
+        </VBox>
+    </center>
+</BorderPane>

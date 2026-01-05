@@ -2,7 +2,6 @@ package com.clubsportif.service;
 
 import com.clubsportif.dao.UserDAO;
 import com.clubsportif.model.User;
-import com.clubsportif.util.Session;
 
 import java.util.Optional;
 

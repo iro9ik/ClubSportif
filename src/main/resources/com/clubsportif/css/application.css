@@ -1,0 +1,28 @@
+/* JavaFX CSS - .root {
+    -fx-font-family: "Segoe UI";
+    -fx-background-color: linear-gradient(to bottom, #f2f6fc, #ffffff);
+}
+
+.title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e3c72;
+}
+
+.button {
+    -fx-background-color: #1e90ff;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-background-radius: 25;
+    -fx-padding: 8 20;
+}
+
+.button:hover {
+    -fx-background-color: #1565c0;
+}
+
+.info {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+}
+Leave this comment until you have at least create one rule which uses -fx-Property */

@@ -1,4 +1,4 @@
-package com.clubsportif;
+package com.clubsportif.app;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,7 +10,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Scene scene = new Scene(
-                FXMLLoader.load(getClass().getResource("/fxml/Login.fxml"))
+                FXMLLoader.load(getClass().getResource("/com/clubsportif/fxml/Login.fxml"))
         );
         stage.setTitle("Club Sportif");
         stage.setScene(scene);

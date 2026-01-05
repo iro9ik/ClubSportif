@@ -84,7 +84,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>com.clubsportif.Main</mainClass>
+                    <mainClass>com.clubsportif.app.Main</mainClass>
                 </configuration>
             </plugin>
 
@@ -96,7 +96,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.clubsportif.Main</mainClass>
+                            <mainClass>com.clubsportif.app.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

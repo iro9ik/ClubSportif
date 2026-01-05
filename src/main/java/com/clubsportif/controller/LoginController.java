@@ -1,8 +1,9 @@
 package com.clubsportif.controller;
 
+import com.clubsportif.dao.UserDAO;
 import com.clubsportif.model.User;
 import com.clubsportif.service.AuthService;
-import com.clubsportif.util.Session;
+import com.clubsportif.service.Session;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,7 +22,7 @@ public class LoginController {
 
     @FXML
     public void goToRegister(ActionEvent event) {
-        switchScene(event, "/fxml/Register.fxml");
+        switchScene(event, "/com/clubsportif/fxml/Register.fxml");
     }
 
     @FXML
@@ -42,9 +43,9 @@ public class LoginController {
             Session.setCurrentUser(user);
 
             switch (user.getRole()) {
-                case "ADMIN" -> switchScene(event, "/fxml/Admin.fxml");
-                case "MEMBER" -> switchScene(event, "/fxml/Member.fxml");
-                default -> switchScene(event, "/fxml/Home.fxml");
+                case "ADMIN" -> switchScene(event, "/com/clubsportif/fxml/Admin.fxml");
+                case "MEMBER" -> switchScene(event, "/com/clubsportif/fxml/Member.fxml");
+                default -> switchScene(event, "/com/clubsportif/fxml/Home.fxml");
             }
 
         }, () -> showAlert("Error", "Invalid username or password"));

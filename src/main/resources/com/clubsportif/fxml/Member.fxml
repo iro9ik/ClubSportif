@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.clubsportif.controller.MemberController"
+            stylesheets="@../css/styles.css"
+            styleClass="root"
+            prefWidth="1200"
+            prefHeight="800">
+
+    <!-- TOP BAR -->
+    <top>
+        <HBox styleClass="header" alignment="CENTER_LEFT" spacing="20">
+            <padding>
+                <Insets top="16" right="32" bottom="16" left="32" />
+            </padding>
+
+            <Label text="Subscription" styleClass="header-title-small" HBox.hgrow="ALWAYS" />
+            
+            <Button onAction="#logout" styleClass="button-ghost" text="Logout" />
+        </HBox>
+    </top>
+
+    <!-- CENTER CONTENT -->
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="scroll-pane">
+            <VBox alignment="TOP_CENTER" spacing="24" styleClass="member-container">
+                <padding>
+                    <Insets top="32" right="32" bottom="32" left="32" />
+                </padding>
+
+                <!-- WELCOME SECTION -->
+                <VBox alignment="CENTER_LEFT" spacing="4" maxWidth="900">
+                    <Label fx:id="welcomeLabel" text="Welcome, Member" styleClass="member-welcome-compact" />
+                    <Label text="Manage your gym membership" styleClass="member-subtitle-compact" />
+                </VBox>
+
+                <!-- MAIN CONTENT GRID -->
+                <GridPane hgap="20" vgap="20" maxWidth="900">
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="60" />
+                        <ColumnConstraints percentWidth="40" />
+                    </columnConstraints>
+
+                    <!-- LEFT: SUBSCRIPTION DETAILS -->
+                    <VBox spacing="20" styleClass="card member-card" GridPane.columnIndex="0">
+                        <padding>
+                            <Insets top="24" right="24" bottom="24" left="24" />
+                        </padding>
+
+                        <!-- Status Header -->
+                        <HBox alignment="CENTER_LEFT" spacing="12">
+                            <Label text="●" fx:id="statusIndicator" styleClass="status-dot-active" />
+                            <Label fx:id="statusLabel" text="ACTIVE" styleClass="status-text-active" />
+                            <Region HBox.hgrow="ALWAYS" />
+                            <Label fx:id="daysRemainingLabel" text="45 days left" styleClass="days-compact" />
+                        </HBox>
+
+                        <Separator />
+
+                        <!-- Plan Info -->
+                        <VBox spacing="12">
+                            <Label text="CURRENT PLAN" styleClass="label-compact" />
+                            <HBox alignment="CENTER_LEFT" spacing="12">
+                                <VBox spacing="4" HBox.hgrow="ALWAYS">
+                                    <Label fx:id="planLabel" text="3 Months Plan" styleClass="plan-name-compact" />
+                                    <Label fx:id="endDateLabel" text="Valid until 01/03/2026" styleClass="plan-date-compact" />
+                                </VBox>
+                                <Label fx:id="priceLabel" text="800 DH" styleClass="price-compact" />
+                            </HBox>
+                        </VBox>
+
+                        <Separator />
+
+                        <!-- Benefits -->
+                        <VBox spacing="10">
+                            <Label text="BENEFITS" styleClass="label-compact" />
+                            <VBox spacing="8">
+                                <HBox spacing="8" alignment="CENTER_LEFT">
+                                    <Label text="✓" styleClass="check-compact" />
+                                    <Label text="Full gym access" styleClass="benefit-compact" />
+                                </HBox>
+                                <HBox spacing="8" alignment="CENTER_LEFT">
+                                    <Label text="✓" styleClass="check-compact" />
+                                    <Label text="Group classes" styleClass="benefit-compact" />
+                                </HBox>
+                                <HBox spacing="8" alignment="CENTER_LEFT">
+                                    <Label text="✓" styleClass="check-compact" />
+                                    <Label text="Locker access" styleClass="benefit-compact" />
+                                </HBox>
+                                <HBox spacing="8" alignment="CENTER_LEFT">
+                                    <Label text="✓" styleClass="check-compact" />
+                                    <Label text="Training sessions" styleClass="benefit-compact" />
+                                </HBox>
+                            </VBox>
+                        </VBox>
+
+                        <!-- Actions -->
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Button onAction="#changePlan" styleClass="button-primary" text="Change Plan" prefWidth="140" />
+                        </HBox>
+                    </VBox>
+
+                    <!-- RIGHT: STATS -->
+                    <VBox spacing="16" GridPane.columnIndex="1">
+                        <!-- Stat Card 1 -->
+                        <VBox spacing="8" styleClass="stat-card-compact">
+                            <Label text="VISITS" styleClass="stat-label-compact" />
+                            <Label fx:id="visitsLabel" text="24" styleClass="stat-value-compact" />
+                            <Label text="This month" styleClass="stat-sub-compact" />
+                        </VBox>
+
+                        <!-- Stat Card 2 -->
+                        <VBox spacing="8" styleClass="stat-card-compact">
+                            <Label text="MEMBER SINCE" styleClass="stat-label-compact" />
+                            <Label fx:id="memberSinceLabel" text="Jan 2024" styleClass="stat-value-compact" />
+                            <Label text="Active member" styleClass="stat-sub-compact" />
+                        </VBox>
+                    </VBox>
+                </GridPane>
+
+            </VBox>
+        </ScrollPane>
+    </center>
+
+</BorderPane>

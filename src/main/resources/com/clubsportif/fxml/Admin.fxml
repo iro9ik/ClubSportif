@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="750.0" prefWidth="1200.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.clubsportif.controller.AdminController">
+
+    <!-- ================= TOP NAVBAR ================= -->
+    <top>
+        <HBox alignment="CENTER_LEFT" spacing="24" styleClass="navbar">
+            <padding>
+                <Insets bottom="16" left="32" right="32" top="16" />
+            </padding>
+
+            <Label styleClass="logo" text="ClubMOD" />
+
+            <Region HBox.hgrow="ALWAYS" />
+
+            <Label fx:id="adminNameLabel" styleClass="nav-text" text="Admin" />
+            <Button onAction="#logout" styleClass="logout-button" text="Logout" />
+        </HBox>
+    </top>
+
+    <!-- ================= MAIN CONTENT ================= -->
+    <center>
+        <HBox>
+            <!-- SIDEBAR -->
+            <VBox prefWidth="250" styleClass="sidebar">
+                <padding>
+                    <Insets bottom="24" left="16" right="16" top="24" />
+                </padding>
+                
+                <VBox spacing="8">
+                    <padding>
+                        <Insets top="16" />
+                    </padding>
+               <Button fx:id="dashboardBtn" onAction="#showDashboard" styleClass="sidebar-button" text="Dashboard" />
+                    <Button fx:id="membersBtn" onAction="#showMembers" styleClass="sidebar-button" text="Members" />
+                    <Button fx:id="requestsBtn" onAction="#showRequests" styleClass="sidebar-button" text="Requests" />
+                </VBox>
+            </VBox>
+
+            <!-- CONTENT AREA -->
+            <StackPane HBox.hgrow="ALWAYS">
+                
+                <!-- ========== DASHBOARD VIEW ========== -->
+                <VBox fx:id="dashboardView" spacing="24" visible="true">
+                    <padding>
+                        <Insets bottom="32" left="32" right="32" top="32" />
+                    </padding>
+
+                    <Label styleClass="page-title" text="Dashboard" />
+
+                    <!-- STATISTICS CARDS -->
+                    <HBox spacing="24">
+                        <VBox spacing="8" styleClass="card stat-card" HBox.hgrow="ALWAYS">
+                            <Label styleClass="stat-label" text="Total Members" />
+                            <Label fx:id="totalMembersLabel" styleClass="stat-value" text="0" />
+                        </VBox>
+
+                        <VBox spacing="8" styleClass="card stat-card" HBox.hgrow="ALWAYS">
+                            <Label styleClass="stat-label" text="Daily Requests" />
+                            <Label fx:id="dailyRequestsLabel" styleClass="stat-value" text="0" />
+                        </VBox>
+
+                        <VBox spacing="8" styleClass="card stat-card" HBox.hgrow="ALWAYS">
+                            <Label styleClass="stat-label" text="Active Members" />
+                            <Label fx:id="activeMembersLabel" styleClass="stat-value" text="0" />
+                        </VBox>
+                    </HBox>
+
+                    <!-- RECENT ACTIVITY -->
+                    <VBox spacing="16" styleClass="card">
+                        <Label styleClass="section-title" text="Recent Activity" />
+                        <Label styleClass="paragraph" text="View members and requests sections for detailed information." />
+                    </VBox>
+                </VBox>
+
+                <!-- ========== MEMBERS VIEW ========== -->
+                <VBox fx:id="membersView" spacing="24" visible="false">
+                    <padding>
+                        <Insets bottom="32" left="32" right="32" top="32" />
+                    </padding>
+
+                    <HBox alignment="CENTER_LEFT" spacing="16">
+                        <Label styleClass="page-title" text="Members Management" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button onAction="#addMember" styleClass="button-primary" text="+ Add Member" />
+                        <Button onAction="#refreshMembers" styleClass="button-secondary" text="🔄 Refresh" />
+                    </HBox>
+
+                    <!-- MEMBERS TABLE -->
+                    <TableView fx:id="membersTable" styleClass="modern-table" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="memberIdCol" text="ID" prefWidth="60" resizable="false" />
+                            <TableColumn fx:id="memberNomCol" text="Nom" prefWidth="150" resizable="false" />
+                            <TableColumn fx:id="memberPrenomCol" text="Prenom" prefWidth="150" resizable="false" />
+                            <TableColumn fx:id="memberSubscriptionCol" text="Subscription" prefWidth="150" resizable="false" />
+                            <TableColumn fx:id="memberDateEndCol" text="Date End" prefWidth="120" resizable="false" />
+                            <TableColumn fx:id="memberStatusCol" text="Status" prefWidth="100" resizable="false" />
+                            <TableColumn fx:id="memberActionsCol" text="Actions" prefWidth="120" resizable="false" />
+                        </columns>
+                    </TableView>
+                </VBox>
+
+                <!-- ========== REQUESTS VIEW ========== -->
+                <VBox fx:id="requestsView" spacing="24" visible="false">
+                    <padding>
+                        <Insets bottom="32" left="32" right="32" top="32" />
+                    </padding>
+
+                    <HBox alignment="CENTER_LEFT" spacing="16">
+                        <Label styleClass="page-title" text="Membership Requests" />
+                        <Region HBox.hgrow="ALWAYS" />
+                        <Button onAction="#refreshRequests" styleClass="button-secondary" text="🔄 Refresh" />
+                    </HBox>
+
+                    <!-- REQUESTS TABLE -->
+                    <TableView fx:id="requestsTable" styleClass="modern-table" VBox.vgrow="ALWAYS">
+                        <columns>
+                            <TableColumn fx:id="requestIdCol" text="ID" prefWidth="60" resizable="false" />
+                            <TableColumn fx:id="requestNomCol" text="Nom" prefWidth="150" resizable="false" />
+                            <TableColumn fx:id="requestPrenomCol" text="Prenom" prefWidth="150" resizable="false" />
+                            <TableColumn fx:id="requestSubscriptionCol" text="Subscription" prefWidth="150" resizable="false" />
+                            <TableColumn fx:id="requestDateCol" text="Date" prefWidth="120" resizable="false" />
+                            <TableColumn fx:id="requestStatusCol" text="Status" prefWidth="120" resizable="false" />
+                            <TableColumn fx:id="requestActionsCol" text="Actions" prefWidth="200" resizable="false" />
+                        </columns>
+                    </TableView>
+                </VBox>
+
+            </StackPane>
+        </HBox>
+    </center>
+
+</BorderPane>

@@ -1,6 +1,5 @@
 package com.clubsportif.dao;
 
-import com.clubsportif.config.Database;
 import com.clubsportif.model.User;
 
 import java.sql.*;
@@ -9,7 +8,7 @@ import java.util.Optional;
 public class UserDAO {
 
     private Connection getConnection() throws SQLException {
-        return Database.getConnection();
+        return com.clubsportif.config.Database.getConnection();
     }
 
     // REGISTER
@@ -55,6 +54,22 @@ public class UserDAO {
                 );
             }
             return Optional.empty();
+        }
+    }
+
+    // Update user role
+    public void updateUserRole(int userId, String newRole) {
+        String sql = "UPDATE users SET role = ? WHERE id = ?";
+        
+        try (Connection conn = getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, newRole);
+            ps.setInt(2, userId);
+            ps.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

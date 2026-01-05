@@ -2,10 +2,7 @@
 # SENSITIVE FILES
 # ==========================
 # Database configuration with credentials
-src/main/java/com/clubsportif/config/Database.java
-
-# Old application folder (if still exists)
-src/application/
+src/main/resources/db.properties
 
 # ==========================
 # MAVEN

@@ -2,6 +2,7 @@ package com.clubsportif.controller;
 
 import com.clubsportif.dao.UserDAO;
 import com.clubsportif.model.User;
+import com.clubsportif.service.Session;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,7 +24,7 @@ public class RegisterController {
 
     @FXML
     public void goToLogin(ActionEvent event) {
-        switchScene(event, "/fxml/Login.fxml");
+        switchScene(event, "/com/clubsportif/fxml/Login.fxml");
     }
 
     @FXML
@@ -53,7 +54,7 @@ public class RegisterController {
         try {
             userDAO.save(user);
             showAlert("Success", "Account created successfully!");
-            switchScene(event, "/fxml/Login.fxml");
+            switchScene(event, "/com/clubsportif/fxml/Login.fxml");
 
         } catch (Exception e) {
             showAlert("Error", "Username already exists");
