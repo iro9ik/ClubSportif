@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+
+<BorderPane prefHeight="600.0" prefWidth="900.0" stylesheets="@/css/styles.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.clubsportif.controller.HomeController">
+
+    <!-- ================= TOP NAVBAR ================= -->
+    <top>
+        <VBox>
+
+            <!-- NAV BAR -->
+            <HBox alignment="CENTER_LEFT" spacing="24" styleClass="navbar">
+                <padding>
+                    <Insets bottom="16" left="24" right="24" top="16" />
+                </padding>
+
+                <Label styleClass="logo" text="ClubMe" />
+
+                <Region HBox.hgrow="ALWAYS" />
+
+                <Button styleClass="nav-button" text="Home" />
+                <Button styleClass="nav-button" text="Prices" />
+                <Button styleClass="nav-button" text="About Us" />
+
+                <Button onAction="#logout" styleClass="logout-button" text="Logout" />
+            </HBox>
+
+            <!-- HEADER -->
+            <VBox prefHeight="65.0" prefWidth="900.0" spacing="8" styleClass="card header-card">
+                <padding>
+                    <Insets bottom="24" left="24" right="24" top="24" />
+                </padding>
+
+                <Label styleClass="title" text="Bienvenue dans l'espace club" />
+
+                <Label styleClass="subtitle" text="S'entraîner. Progresser. Performer." />
+            </VBox>
+        </VBox>
+    </top>
+
+    <!-- ================= CENTER ================= -->
+<center>
+    <VBox alignment="TOP_CENTER" prefHeight="490.0" prefWidth="900.0" spacing="32">
+        <padding>
+            <Insets bottom="32" left="32" right="32" top="32" />
+        </padding>
+
+        <!-- INTRODUCTION -->
+        <VBox minHeight="-Infinity" prefHeight="120.0" prefWidth="836.0" spacing="12" styleClass="card">
+            <Label styleClass="section-title" text="About Our Club" textFill="WHITE" />
+            <Label minHeight="-Infinity" prefHeight="46.0" prefWidth="788.0" styleClass="paragraph"
+                   text="Clubme est un centre de remise en forme moderne. Nous vous aidons à atteindre vos objectifs de santé et de performance grâce à un encadrement professionnel, des programmes d'entraînement adaptés et des abonnements flexibles."
+                   wrapText="true" />
+        </VBox>
+
+        <!-- PRICING BOX -->
+        <HBox fx:id="pricingBox" alignment="CENTER" prefHeight="278.0" prefWidth="836.0" spacing="24">
+            <VBox maxHeight="-Infinity" prefHeight="137.0" prefWidth="170.0" spacing="12" styleClass="card price-card">
+                <Label styleClass="title" text="Monthly Plan" />
+                <Label styleClass="price" text="300 DH / mois" />
+                <Button fx:id="monthlyPlanButton" onAction="#choosePlan" styleClass="button-primary" text="Choisir" />
+            </VBox>
+
+            <VBox prefHeight="213.0" prefWidth="192.0" spacing="12" styleClass="card price-card popular">
+                <Label styleClass="badge" text="POPULAR" />
+                <Label styleClass="title" text="3 Months Plan" />
+                <Label styleClass="price" text="800 DH / 3 mois" />
+                <Button fx:id="threeMonthsPlanButton" onAction="#choosePlan" styleClass="button-primary" text="Choisir" />
+            </VBox>
+
+            <VBox maxHeight="-Infinity" prefHeight="143.0" prefWidth="170.0" spacing="12" styleClass="card price-card">
+                <Label styleClass="title" text="Annual Plan" />
+                <Label styleClass="price" text="2800 DH / an" />
+                <Button fx:id="annualPlanButton" onAction="#choosePlan" styleClass="button-primary" text="Choisir" />
+            </VBox>
+        </HBox>
+
+        <!-- WELCOME BOX -->
+        <VBox fx:id="welcomeBox" alignment="CENTER" spacing="12" prefWidth="600" styleClass="card">
+            <Label fx:id="welcomeLabel" styleClass="title" text="" />
+            <Label fx:id="instructionLabel" styleClass="subtitle" text="" wrapText="true"/>
+        </VBox>
+
+    </VBox>
+</center>
+
+
+</BorderPane>

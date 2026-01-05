@@ -1,0 +1,67 @@
+# ==========================
+# SENSITIVE FILES
+# ==========================
+# Database configuration with credentials
+src/main/java/com/clubsportif/config/Database.java
+
+# Old application folder (if still exists)
+src/application/
+
+# ==========================
+# MAVEN
+# ==========================
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# ==========================
+# ECLIPSE
+# ==========================
+.settings/
+.project
+.classpath
+.factorypath
+bin/
+*.tmp
+*.bak
+*.swp
+
+# ==========================
+# INTELLIJ IDEA
+# ==========================
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# ==========================
+# OPERATING SYSTEM
+# ==========================
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ==========================
+# LOGS
+# ==========================
+*.log
+logs/
+
+# ==========================
+# COMPILED FILES
+# ==========================
+*.class
+*.jar
+*.war
+*.ear
