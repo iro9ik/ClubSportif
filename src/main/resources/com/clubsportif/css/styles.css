@@ -650,3 +650,269 @@
 .scroll-pane .scroll-bar:vertical .track { -fx-background-color: transparent; }
 .scroll-pane .scroll-bar:vertical .thumb { -fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 4; }
 .scroll-pane .scroll-bar:vertical .thumb:hover { -fx-background-color: rgba(255,255,255,0.3); }
+
+/* =========================
+   MODERN TABLE IMPROVEMENTS
+   ========================= */
+
+.modern-table {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: 10;
+    -fx-padding: 8 10;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.28), 10, 0.25, 0, 4);
+    -fx-font-size: 13px;
+}
+
+/* header */
+.modern-table .column-header-background {
+    -fx-background-color: transparent;
+}
+
+.modern-table .column-header, 
+.modern-table .column-header .label {
+    -fx-font-size: 13px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -text-secondary;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 6 14;
+}
+
+/* table cell: remove vertical borders and use a single bottom divider for rows */
+.modern-table .table-row-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 0;                      /* row padding controlled by cell */
+    -fx-border-color: transparent transparent rgba(255,255,255,0.05) transparent; /* bottom border only */
+    -fx-border-width: 0 0 1 0;
+}
+
+/* alternate rows subtle contrast */
+.modern-table .table-row-cell:odd {
+    -fx-background-color: derive(-bg-card, 2%);
+}
+
+/* individual cells: remove vertical borders, add comfortable cell padding */
+.modern-table .table-cell {
+    -fx-background-color: transparent;
+    -fx-padding: 14 18;
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 14px;
+    -fx-alignment: CENTER_LEFT;
+    -fx-border-color: transparent;       /* make sure no vertical border */
+}
+
+/* focused / selected row highlight */
+.modern-table .table-row-cell:focused,
+.modern-table .table-row-cell:selected {
+    -fx-background-color: rgba(34,197,94,0.06);
+}
+
+/* remove default column resize UI visuals */
+.modern-table .column-resize-bar,
+.modern-table .column-resize-line,
+.modern-table .filler {
+    -fx-background-color: transparent;
+}
+
+/* Scrollbar: slimmer, themed */
+.modern-table .scroll-bar:vertical {
+    -fx-pref-width: 10px;
+    -fx-background-color: transparent;
+}
+.modern-table .scroll-bar:vertical .thumb {
+    -fx-background-color: -accent;
+    -fx-background-radius: 6;
+}
+
+/* =========================
+   TABLE ACTION BUTTONS
+   ========================= */
+
+/* "Options" pill button shown inside table actions */
+.table-options-button {
+    -fx-background-color: -accent;
+    -fx-text-fill: white;
+    -fx-background-radius: 14;
+    -fx-padding: 6 14;
+    -fx-font-weight: 600;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(34,197,94,0.18), 6, 0.2, 0, 2);
+}
+
+/* Accept / primary action inside requests row */
+.table-action-primary {
+    -fx-background-color: -accent;
+    -fx-text-fill: white;
+    -fx-background-radius: 10;
+    -fx-padding: 6 12;
+    -fx-font-weight: 700;
+    -fx-font-size: 12px;
+}
+
+/* Decline / secondary action */
+.table-action-secondary {
+    -fx-background-color: transparent;
+    -fx-text-fill: -text-secondary;
+    -fx-border-color: rgba(255,255,255,0.06);
+    -fx-border-width: 1.5;
+    -fx-background-radius: 10;
+    -fx-padding: 6 12;
+    -fx-font-weight: 700;
+    -fx-font-size: 12px;
+}
+
+/* Action column container alignment */
+.modern-table .table-column .table-cell {
+    -fx-alignment: CENTER;
+}
+
+/* =========================
+   DIALOG BUTTONS
+   ========================= */
+
+.dialog-card .dialog-pane {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: 12;
+}
+
+.table-cell-label {
+    -fx-text-fill: -text-primary;
+    -fx-font-size: 14px;
+    -fx-line-spacing: 1.2;
+}
+@media screen and (max-width: 1100px) {
+    .table-cell-label { -fx-font-size: 13px; }
+}
+
+.dialog-pane .button {
+    -fx-font-weight: 700;
+}
+
+/* re-use existing button styles for dialog buttons */
+.dialog-pane .button.button-primary { }
+.dialog-pane .button.button-danger { }
+.dialog-pane .button.button-ghost { }
+
+/* fine adjust for compactness on smaller sizes */
+@media screen and (max-width: 1100px) {
+    .modern-table .table-cell { -fx-padding: 10 12; -fx-font-size: 13px; }
+    .modern-table .column-header, .modern-table .column-header .label { -fx-font-size: 12px; }
+}
+
+
+.button-danger-outline {
+    -fx-background-color: transparent;
+    -fx-text-fill: -danger;
+    -fx-border-color: -danger;
+    -fx-border-width: 2;
+    -fx-border-radius: 12;
+    -fx-background-radius: 12;
+    -fx-font-weight: 700;
+    -fx-font-size: 14px;
+    -fx-padding: 10 18;
+    -fx-cursor: hand;
+}
+.button-danger-outline:hover {
+    -fx-background-color: rgba(239,68,68,0.06);
+}
+
+/* =========================
+   FEATURES CAROUSEL / PRICING
+   ========================= */
+
+/* Features pagination (carousel) */
+.features-pagination {
+    -fx-padding: 20 0 20 0;
+}
+
+/* Pagination page content container adjustments */
+.features-pagination .control-box {
+    -fx-background-color: transparent;
+}
+
+/* Feature slide card */
+.feature-slide {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: 14;
+    -fx-padding: 28;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.32), 14, 0.2, 0, 6);
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* Slide title and body */
+.feature-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -text-primary;
+    -fx-padding: 0 0 8 0;
+}
+.feature-desc {
+    -fx-font-size: 15px;
+    -fx-text-fill: -text-secondary;
+    -fx-wrap-text: true;
+    -fx-line-spacing: 6;
+}
+
+/* PRICING container */
+.pricing-container {
+    -fx-padding: 30 40;
+    -fx-alignment: CENTER;
+}
+
+/* Price card (bigger type) */
+.price-card {
+    -fx-background-color: -bg-pricing;
+    -fx-background-radius: 18;
+    -fx-padding: 32;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 18, 0.25, 0, 10);
+    -fx-alignment: CENTER;
+}
+
+/* Bigger font for price, bold */
+.price {
+    -fx-font-size: 44px;
+    -fx-font-weight: 800;
+    -fx-text-fill: -accent;
+    -fx-padding: 6 0 0 0;
+}
+
+/* slightly larger plan-title to match new scale */
+.plan-title { -fx-font-size: 20px; -fx-font-weight: 700; -fx-text-fill: -text-primary; }
+
+/* Popular card: green outline, glow, and scale */
+.price-card.popular {
+    -fx-border-color: -accent;
+    -fx-border-width: 3;
+    -fx-border-radius: 18;
+    -fx-scale-x: 1.06;
+    -fx-scale-y: 1.06;
+    -fx-effect: dropshadow(gaussian, rgba(34,197,94,0.14), 30, 0.2, 0, 12), dropshadow(gaussian, rgba(0,0,0,0.35), 18, 0.25, 0, 10);
+    -fx-background-color: linear-gradient(to bottom, derive(-bg-pricing, 2%), -bg-pricing);
+}
+
+/* "POPULAR" badge */
+.price-card.popular .badge {
+    -fx-text-fill: -accent;
+    -fx-font-weight: 800;
+    -fx-font-size: 12px;
+    -fx-padding: 6 10;
+    -fx-background-color: transparent;
+}
+
+/* Bigger choose button inside pricing cards */
+.price-choose-button {
+    -fx-background-radius: 16;
+    -fx-font-size: 15px;
+    -fx-font-weight: 700;
+    -fx-padding: 12 28;
+}
+
+/* Make cards responsive: shrink on small screens */
+@media screen and (max-width: 1000px) {
+    .price { -fx-font-size: 36px; }
+    .price-card.popular { -fx-scale-x: 1; -fx-scale-y: 1; }
+    .pricing-container { -fx-spacing: 20; -fx-padding: 20 12; }
+}
+
+/* small visual tweak to center popular card elevation */
+.price-card.popular { -fx-translate-y: -8; }

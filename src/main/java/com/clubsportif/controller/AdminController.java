@@ -8,23 +8,30 @@ import com.clubsportif.model.Member;
 import com.clubsportif.model.Request;
 import com.clubsportif.model.User;
 import com.clubsportif.service.Session;
-
+import javafx.application.Platform;
+import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
+import javafx.scene.Node;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.application.Platform;
+import javafx.beans.binding.DoubleBinding;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.Label;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -100,6 +107,11 @@ public class AdminController {
         loadDashboardStats();
         loadMembers();
         loadRequests();
+
+        Platform.runLater(() -> {
+            membersTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+            requestsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+        });    
     }
 
     // ================= NAVIGATION =================
@@ -321,14 +333,17 @@ public class AdminController {
             if (response == ButtonType.OK && !nomField.getText().isEmpty() 
                 && !prenomField.getText().isEmpty() && subscriptionCombo.getValue() != null) {
                 
-                LocalDate endDate = calculateEndDate(subscriptionCombo.getValue());
-                Member newMember = new Member(
-                    nomField.getText(),
-                    prenomField.getText(),
-                    subscriptionCombo.getValue(),
-                    endDate
-                );
-                memberDAO.createMember(newMember);
+                    LocalDate startDate = LocalDate.now();
+                    LocalDate endDate = calculateEndDate(subscriptionCombo.getValue());
+                    Member newMember = new Member(
+                        nomField.getText(),
+                        prenomField.getText(),
+                        subscriptionCombo.getValue(),
+                        startDate,
+                        endDate
+                    );
+                    memberDAO.createMember(newMember);
+
                 loadMembers();
                 loadDashboardStats();
             }
@@ -454,16 +469,20 @@ public class AdminController {
         
         if (existingMember == null) {
             // Create member from request only if doesn't exist
+            LocalDate startDate = LocalDate.now();
             LocalDate endDate = calculateEndDate(request.getSubscription());
             Member newMember = new Member(
+                request.getUserId(),     // user_id
                 request.getNom(),
                 request.getPrenom(),
                 request.getSubscription(),
+                startDate,
                 endDate
             );
             memberDAO.createMember(newMember);
+
         }
-        
+
         // Update user role to MEMBER
         UserDAO userDAO = new UserDAO();
         try {
@@ -495,3 +514,4 @@ public class AdminController {
         alert.showAndWait();
     }
 }
+

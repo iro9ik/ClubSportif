@@ -100,20 +100,16 @@
                         </VBox>
 
                         <!-- Actions -->
-                        <HBox spacing="12" alignment="CENTER_LEFT">
-                            <Button onAction="#changePlan" styleClass="button-primary" text="Change Plan" prefWidth="140" />
-                        </HBox>
+                       <!-- Actions -->
+<HBox spacing="12" alignment="CENTER_LEFT">
+    <Button onAction="#openManagePlan" styleClass="button-primary" text="Manage Plan" prefWidth="140" />
+    <Button onAction="#confirmCancelPlan" styleClass="button-danger-outline" text="Cancel Plan" prefWidth="140" />
+</HBox>
+
                     </VBox>
 
                     <!-- RIGHT: STATS -->
                     <VBox spacing="16" GridPane.columnIndex="1">
-                        <!-- Stat Card 1 -->
-                        <VBox spacing="8" styleClass="stat-card-compact">
-                            <Label text="VISITS" styleClass="stat-label-compact" />
-                            <Label fx:id="visitsLabel" text="24" styleClass="stat-value-compact" />
-                            <Label text="This month" styleClass="stat-sub-compact" />
-                        </VBox>
-
                         <!-- Stat Card 2 -->
                         <VBox spacing="8" styleClass="stat-card-compact">
                             <Label text="MEMBER SINCE" styleClass="stat-label-compact" />

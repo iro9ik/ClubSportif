@@ -3,13 +3,19 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Pagination?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="700.0" prefWidth="1000.0" stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.clubsportif.controller.HomeController">
+<BorderPane prefHeight="700.0" prefWidth="1000.0"
+            stylesheets="@../css/styles.css"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.clubsportif.controller.HomeController"
+            styleClass="root">
 
     <!-- ================= TOP NAVBAR ================= -->
     <top>
@@ -54,45 +60,44 @@
                     <Insets bottom="40" left="40" right="40" top="40" />
                 </padding>
 
-                <!-- INTRODUCTION -->
-                <VBox spacing="12" styleClass="card intro-card">
-                    <Label styleClass="section-title" text="About Our Club" />
-                    <Label styleClass="paragraph" text="Clubme est un centre de remise en forme moderne. Nous vous aidons à atteindre vos objectifs de santé et de performance" wrapText="true" />
+                <!-- ================= FEATURE CAROUSEL ================= -->
+                <VBox alignment="CENTER" spacing="16">
+                    <Pagination fx:id="featuresPagination" pageCount="3" maxWidth="980" styleClass="features-pagination" />
                 </VBox>
 
-                <!-- PRICING BOX -->
-                <HBox fx:id="pricingBox" alignment="CENTER" spacing="32">
-                    <VBox prefHeight="218.0" prefWidth="186.0" spacing="16" styleClass="card price-card">
+                <!-- ================= PRICING BOX ================= -->
+                <HBox fx:id="pricingBox" alignment="CENTER" spacing="36" styleClass="pricing-container">
+                    <VBox prefHeight="260.0" prefWidth="260.0" spacing="16" styleClass="card price-card">
                         <Label styleClass="plan-title" text="Monthly Plan" />
                         <Label styleClass="price" text="300 DH" />
                         <Label styleClass="price-period" text="/ mois" />
                         <Region VBox.vgrow="ALWAYS" />
-                        <Button fx:id="monthlyPlanButton" onAction="#choosePlan" styleClass="button-primary" text="Choisir" userData="1 month" />
+                        <Button fx:id="monthlyPlanButton" onAction="#choosePlan" styleClass="button-primary price-choose-button" text="Choisir" userData="1 month" />
                     </VBox>
-   
-                    <VBox prefHeight="218.0" prefWidth="221.0" spacing="16" styleClass="card price-card popular">
+
+                    <VBox prefHeight="320.0" prefWidth="320.0" spacing="18" styleClass="card price-card popular">
                         <Label styleClass="badge" text="POPULAR" />
                         <Label styleClass="plan-title" text="3 Months Plan" />
                         <Label styleClass="price" text="800 DH" />
                         <Label styleClass="price-period" text="/ 3 mois" />
                         <Region VBox.vgrow="ALWAYS" />
-                        <Button fx:id="threeMonthsPlanButton" onAction="#choosePlan" styleClass="button-primary" text="Choisir" userData="3 months" />
+                        <Button fx:id="threeMonthsPlanButton" onAction="#choosePlan" styleClass="button-primary price-choose-button" text="Choisir" userData="3 months" />
                     </VBox>
 
-                    <VBox prefHeight="218.0" prefWidth="201.0" spacing="16" styleClass="card price-card">
+                    <VBox prefHeight="260.0" prefWidth="260.0" spacing="16" styleClass="card price-card">
                         <Label styleClass="plan-title" text="Annual Plan" />
                         <Label styleClass="price" text="2800 DH" />
                         <Label styleClass="price-period" text="/ an" />
                         <Region VBox.vgrow="ALWAYS" />
-                        <Button fx:id="annualPlanButton" onAction="#choosePlan" styleClass="button-primary" text="Choisir" userData="1 year" />
+                        <Button fx:id="annualPlanButton" onAction="#choosePlan" styleClass="button-primary price-choose-button" text="Choisir" userData="1 year" />
                     </VBox>
                 </HBox>
 
-                <!-- WELCOME BOX -->
+                <!-- WELCOME BOX (shown after plan selection) -->
                 <VBox fx:id="welcomeBox" alignment="CENTER" spacing="24" styleClass="card welcome-card" visible="false">
                     <Label styleClass="welcome-title" text="Welcome to the club!" />
                     <Label styleClass="welcome-message" text="Please visit the club's administration desk to complete your registration." textAlignment="CENTER" wrapText="true" />
-                    
+
                     <HBox alignment="CENTER" spacing="16">
                         <Button onAction="#changePlan" styleClass="button-primary" text="Change Plan" />
                         <Button onAction="#cancelRequest" styleClass="button-secondary-outline" text="Annuler" />
@@ -102,24 +107,24 @@
                 <!-- MEMBER STATUS BOX (for active members) -->
                 <VBox fx:id="memberStatusBox" alignment="CENTER" spacing="28" styleClass="card member-status-card" visible="false">
                     <Label styleClass="status-title" text="Your Membership" />
-                    
+
                     <VBox spacing="16" alignment="CENTER">
                         <HBox spacing="12" alignment="CENTER">
                             <Label styleClass="status-label" text="Status:" />
                             <Label fx:id="membershipStatusLabel" styleClass="status-active" text="ACTIVE" />
                         </HBox>
-                        
+
                         <HBox spacing="12" alignment="CENTER">
                             <Label styleClass="status-label" text="Plan:" />
                             <Label fx:id="membershipPlanLabel" styleClass="plan-info" text="3 months" />
                         </HBox>
-                        
+
                         <HBox spacing="12" alignment="CENTER">
                             <Label styleClass="status-label" text="End Date:" />
                             <Label fx:id="membershipEndDateLabel" styleClass="date-info" text="2024-12-31" />
                         </HBox>
                     </VBox>
-                    
+
                     <Button onAction="#renewMembership" styleClass="button-primary" text="Renew Membership" />
                 </VBox>
 
@@ -134,7 +139,7 @@
 
                     <Label styleClass="dialog-title" text="Confirm Your Plan" />
                     <Label fx:id="confirmMessage" styleClass="dialog-message" textAlignment="CENTER" wrapText="true" />
-                    
+
                     <HBox alignment="CENTER" spacing="16">
                         <Button onAction="#confirmPlanSelection" styleClass="button-primary" text="Confirm" />
                         <Button onAction="#cancelDialog" styleClass="button-ghost" text="Annuler" />

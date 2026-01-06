@@ -98,17 +98,21 @@
                     </HBox>
 
                     <!-- MEMBERS TABLE -->
-                    <TableView fx:id="membersTable" styleClass="modern-table" VBox.vgrow="ALWAYS">
+                    <TableView fx:id="membersTable"
+                            styleClass="modern-table"
+                            VBox.vgrow="ALWAYS"
+                            prefHeight="420.0">
                         <columns>
-                            <TableColumn fx:id="memberIdCol" text="ID" prefWidth="60" resizable="false" />
-                            <TableColumn fx:id="memberNomCol" text="Nom" prefWidth="150" resizable="false" />
-                            <TableColumn fx:id="memberPrenomCol" text="Prenom" prefWidth="150" resizable="false" />
-                            <TableColumn fx:id="memberSubscriptionCol" text="Subscription" prefWidth="150" resizable="false" />
-                            <TableColumn fx:id="memberDateEndCol" text="Date End" prefWidth="120" resizable="false" />
-                            <TableColumn fx:id="memberStatusCol" text="Status" prefWidth="100" resizable="false" />
-                            <TableColumn fx:id="memberActionsCol" text="Actions" prefWidth="120" resizable="false" />
+                            <TableColumn fx:id="memberIdCol" text="ID" prefWidth="70" resizable="false" />
+                            <TableColumn fx:id="memberNomCol" text="Nom" prefWidth="180" resizable="false" />
+                            <TableColumn fx:id="memberPrenomCol" text="Prenom" prefWidth="180" resizable="false" />
+                            <TableColumn fx:id="memberSubscriptionCol" text="Subscription" prefWidth="160" resizable="false" />
+                            <TableColumn fx:id="memberDateEndCol" text="Date End" prefWidth="140" resizable="false" />
+                            <TableColumn fx:id="memberStatusCol" text="Status" prefWidth="120" resizable="false" />
+                            <TableColumn fx:id="memberActionsCol" text="Actions" prefWidth="140" resizable="false" />
                         </columns>
                     </TableView>
+
                 </VBox>
 
                 <!-- ========== REQUESTS VIEW ========== -->
@@ -124,17 +128,21 @@
                     </HBox>
 
                     <!-- REQUESTS TABLE -->
-                    <TableView fx:id="requestsTable" styleClass="modern-table" VBox.vgrow="ALWAYS">
+                    <TableView fx:id="requestsTable"
+                            styleClass="modern-table"
+                            VBox.vgrow="ALWAYS"
+                            prefHeight="420.0">
                         <columns>
-                            <TableColumn fx:id="requestIdCol" text="ID" prefWidth="60" resizable="false" />
-                            <TableColumn fx:id="requestNomCol" text="Nom" prefWidth="150" resizable="false" />
-                            <TableColumn fx:id="requestPrenomCol" text="Prenom" prefWidth="150" resizable="false" />
-                            <TableColumn fx:id="requestSubscriptionCol" text="Subscription" prefWidth="150" resizable="false" />
-                            <TableColumn fx:id="requestDateCol" text="Date" prefWidth="120" resizable="false" />
+                            <TableColumn fx:id="requestIdCol" text="ID" prefWidth="70" resizable="false" />
+                            <TableColumn fx:id="requestNomCol" text="Nom" prefWidth="170" resizable="false" />
+                            <TableColumn fx:id="requestPrenomCol" text="Prenom" prefWidth="170" resizable="false" />
+                            <TableColumn fx:id="requestSubscriptionCol" text="Subscription" prefWidth="160" resizable="false" />
+                            <TableColumn fx:id="requestDateCol" text="Date" prefWidth="130" resizable="false" />
                             <TableColumn fx:id="requestStatusCol" text="Status" prefWidth="120" resizable="false" />
-                            <TableColumn fx:id="requestActionsCol" text="Actions" prefWidth="200" resizable="false" />
+                            <TableColumn fx:id="requestActionsCol" text="Actions" prefWidth="180" resizable="false" />
                         </columns>
                     </TableView>
+
                 </VBox>
 
             </StackPane>
