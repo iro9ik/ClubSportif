@@ -72,7 +72,7 @@
                         <Label styleClass="price" text="300 DH" />
                         <Label styleClass="price-period" text="/ mois" />
                         <Region VBox.vgrow="ALWAYS" />
-                        <Button fx:id="monthlyPlanButton" onAction="#choosePlan" styleClass="button-primary price-choose-button" text="Choisir" userData="1 month" />
+                        <Button fx:id="monthlyPlanButton" onAction="#choosePlan" styleClass="button-primary" text="Choisir" userData="1 month" />
                     </VBox>
 
                     <VBox prefHeight="320.0" prefWidth="320.0" spacing="18" styleClass="card price-card popular">
@@ -81,7 +81,7 @@
                         <Label styleClass="price" text="800 DH" />
                         <Label styleClass="price-period" text="/ 3 mois" />
                         <Region VBox.vgrow="ALWAYS" />
-                        <Button fx:id="threeMonthsPlanButton" onAction="#choosePlan" styleClass="button-primary price-choose-button" text="Choisir" userData="3 months" />
+                        <Button fx:id="threeMonthsPlanButton" onAction="#choosePlan" styleClass="button-primary" text="Choisir" userData="3 months" />
                     </VBox>
 
                     <VBox prefHeight="260.0" prefWidth="260.0" spacing="16" styleClass="card price-card">
@@ -89,7 +89,7 @@
                         <Label styleClass="price" text="2800 DH" />
                         <Label styleClass="price-period" text="/ an" />
                         <Region VBox.vgrow="ALWAYS" />
-                        <Button fx:id="annualPlanButton" onAction="#choosePlan" styleClass="button-primary price-choose-button" text="Choisir" userData="1 year" />
+                        <Button fx:id="annualPlanButton" onAction="#choosePlan" styleClass="button-primary" text="Choisir" userData="1 year" />
                     </VBox>
                 </HBox>
 
