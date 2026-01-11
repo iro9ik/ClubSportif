@@ -61,9 +61,6 @@ public class HomeController {
         // Initialize database tables
         DatabaseInitializer.initializeTables();
 
-        // Setup the features carousel
-        setupFeaturesCarousel();
-
         // Get current user ID from session
         User currentUser = Session.getCurrentUser();
         if (currentUser != null) {
@@ -86,54 +83,6 @@ public class HomeController {
         }
     }
 
-    // ================= FEATURE CAROUSEL =================
-    private void setupFeaturesCarousel() {
-        // Page factory to create three feature slides
-        featuresPagination.setPageFactory(pageIndex -> {
-            VBox slide = new VBox(12);
-            slide.getStyleClass().add("feature-slide");
-            slide.setPrefWidth(920);
-            slide.setMaxWidth(920);
-
-            Label title = new Label();
-            title.getStyleClass().add("feature-title");
-            Label desc = new Label();
-            desc.getStyleClass().add("feature-desc");
-            desc.setWrapText(true);
-            desc.setMaxWidth(880);
-
-            switch (pageIndex) {
-                case 0 -> {
-                    title.setText("State-of-the-art Equipment");
-                    desc.setText("Cutting-edge machines and free weights, maintained daily and designed for all fitness levels.");
-                }
-                case 1 -> {
-                    title.setText("Expert Coaches & Classes");
-                    desc.setText("Certified trainers run small group classes and personalized coaching to help you meet goals.");
-                }
-                default -> {
-                    title.setText("Community & Wellness");
-                    desc.setText("A friendly, motivating atmosphere with nutrition advice, workshops and member events.");
-                }
-            }
-
-            slide.getChildren().addAll(title, desc);
-            slide.setPadding(new javafx.geometry.Insets(18));
-            return slide;
-        });
-
-        // autoplay carousel (rotate every 4s)
-        featuresAutoPlay = new Timeline(new KeyFrame(Duration.seconds(4), ev -> {
-            int next = (featuresPagination.getCurrentPageIndex() + 1) % featuresPagination.getPageCount();
-            featuresPagination.setCurrentPageIndex(next);
-        }));
-        featuresAutoPlay.setCycleCount(Timeline.INDEFINITE);
-        featuresAutoPlay.play();
-
-        // pause on hover
-        featuresPagination.setOnMouseEntered(e -> featuresAutoPlay.pause());
-        featuresPagination.setOnMouseExited(e -> featuresAutoPlay.play());
-    }
 
     // ================= DISPLAY METHODS =================
     private void showPricingPlans() {

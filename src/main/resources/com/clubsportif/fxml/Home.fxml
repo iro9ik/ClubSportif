@@ -60,10 +60,7 @@
                     <Insets bottom="40" left="40" right="40" top="40" />
                 </padding>
 
-                <!-- ================= FEATURE CAROUSEL ================= -->
-                <VBox alignment="CENTER" spacing="16">
-                    <Pagination fx:id="featuresPagination" pageCount="3" maxWidth="980" styleClass="features-pagination" />
-                </VBox>
+
 
                 <!-- ================= PRICING BOX ================= -->
                 <HBox fx:id="pricingBox" alignment="CENTER" spacing="36" styleClass="pricing-container">
