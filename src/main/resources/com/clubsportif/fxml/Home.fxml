@@ -31,9 +31,7 @@
 
                 <Region HBox.hgrow="ALWAYS" />
 
-                <Button styleClass="nav-button" text="Home" />
-                <Button styleClass="nav-button" text="Prices" />
-                <Button styleClass="nav-button" text="About Us" />
+               
 
                 <Button onAction="#logout" styleClass="logout-button" text="Logout" />
             </HBox>
