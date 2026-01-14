@@ -1,11 +1,16 @@
 package com.clubsportif.controller;
 
 import com.clubsportif.dao.MemberDAO;
+import com.clubsportif.dao.ReactiveMemberDAO;
+import com.clubsportif.dao.ReactiveRequestDAO;
 import com.clubsportif.dao.RequestDAO;
 import com.clubsportif.dao.UserDAO;
 import com.clubsportif.model.Member;
 import com.clubsportif.model.User;
 import com.clubsportif.service.Session;
+import com.clubsportif.websocket.ClubServerEndpoint;
+import com.clubsportif.websocket.WebSocketClientService;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
@@ -14,6 +19,8 @@ import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.Node;
+import reactor.core.publisher.Mono;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -33,14 +40,21 @@ public class MemberController {
     private MemberDAO memberDAO;
     private RequestDAO requestDAO;
     private UserDAO userDAO;
+    private ReactiveMemberDAO reactiveMemberDAO;
+    private ReactiveRequestDAO reactiveRequestDAO;
     private Member currentMember;
     private int currentUserId;
+
+    // WebSocket client for real-time notifications
+    private WebSocketClientService wsClient;
 
     @FXML
     public void initialize() {
         memberDAO = new MemberDAO();
         requestDAO = new RequestDAO();
         userDAO = new UserDAO();
+        reactiveMemberDAO = new ReactiveMemberDAO(memberDAO);
+        reactiveRequestDAO = new ReactiveRequestDAO(requestDAO);
 
         // Get current user from session
         User currentUser = Session.getCurrentUser();
@@ -50,15 +64,98 @@ public class MemberController {
 
             // Load member data
             loadMemberData();
+            
+            // Initialize WebSocket client
+            initializeWebSocket(currentUser);
+        }
+    }
+
+    /**
+     * Initialize WebSocket client for real-time notifications.
+     */
+    private void initializeWebSocket(User user) {
+        wsClient = new WebSocketClientService();
+
+        // Handle request acceptance notification
+        wsClient.setOnRequestAccepted(message -> {
+            System.out.println("[Member] Request accepted notification received!");
+            
+            // Reload member data to show updated subscription
+            loadMemberData();
+            
+            // Show notification alert
+            String subscription = message.getPayloadString("subscription");
+            String endDate = message.getPayloadString("endDate");
+            
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("🎉 Request Accepted!");
+            alert.setHeaderText("Your membership request has been approved!");
+            alert.setContentText("Plan: " + formatPlanName(subscription) + 
+                    "\nValid until: " + endDate);
+            alert.showAndWait();
+        });
+
+        // Handle request declined notification
+        wsClient.setOnRequestDeclined(message -> {
+            System.out.println("[Member] Request declined notification received");
+            
+            String reason = message.getPayloadString("reason");
+            
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Request Declined");
+            alert.setHeaderText("Your membership request was not approved");
+            alert.setContentText(reason != null ? reason : "Please contact administration for more details.");
+            alert.showAndWait();
+        });
+
+        // Handle data refresh
+        wsClient.setOnDataRefresh(message -> {
+            loadMemberData();
+        });
+
+        // Handle connection state changes
+        wsClient.setOnConnectionStateChanged(connected -> {
+            System.out.println("[Member] WebSocket connection: " + (connected ? "connected" : "disconnected"));
+        });
+
+        // Connect with member role
+        wsClient.connect(user.getId(), "MEMBER");
+    }
+
+    /**
+     * Clean up resources when controller is destroyed.
+     */
+    public void cleanup() {
+        if (wsClient != null) {
+            wsClient.shutdown();
         }
     }
 
     private void loadMemberData() {
-        currentMember = memberDAO.getMemberByUserId(currentUserId);
+        System.out.println("[Member] Loading member data for userId: " + currentUserId);
+        
+        reactiveMemberDAO.getMemberByUserId(currentUserId)
+            .doOnNext(member -> {
+                System.out.println("[Member] Found member: " + member.getNom() + " " + member.getPrenom());
+                currentMember = member;
+                Platform.runLater(() -> updateMemberUI(member));
+            })
+            .doOnError(error -> {
+                System.err.println("[Member] Failed to load member data: " + error.getMessage());
+                Platform.runLater(this::showNoMembershipUI);
+            })
+            .switchIfEmpty(Mono.defer(() -> {
+                System.out.println("[Member] No member found for userId: " + currentUserId);
+                Platform.runLater(this::showNoMembershipUI);
+                return Mono.empty();
+            }))
+            .subscribe();
+    }
 
-        if (currentMember != null) {
+    private void updateMemberUI(Member member) {
+        if (member != null) {
             // Update status
-            String status = currentMember.getStatus();
+            String status = member.getStatus();
             statusLabel.setText(status);
 
             if ("ACTIVE".equals(status)) {
@@ -74,19 +171,20 @@ public class MemberController {
             }
 
             // Update plan details
-            planLabel.setText(formatPlanName(currentMember.getSubscription()));
+            planLabel.setText(formatPlanName(member.getSubscription()));
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            endDateLabel.setText("Valid until " + currentMember.getDateEnd().format(formatter));
+            endDateLabel.setText("Valid until " + member.getDateEnd().format(formatter));
 
             // Update price
-            String price = getPriceForPlan(currentMember.getSubscription());
+            String price = getPriceForPlan(member.getSubscription());
             priceLabel.setText(price);
 
             // Calculate days remaining
-            long daysRemaining = ChronoUnit.DAYS.between(LocalDate.now(), currentMember.getDateEnd());
+            long daysRemaining = ChronoUnit.DAYS.between(LocalDate.now(), member.getDateEnd());
             if (daysRemaining > 0) {
                 daysRemainingLabel.setText(daysRemaining + " days remaining");
+                daysRemainingLabel.getStyleClass().remove("expired-text");
             } else {
                 daysRemainingLabel.setText("Expired");
                 daysRemainingLabel.getStyleClass().add("expired-text");
@@ -94,20 +192,23 @@ public class MemberController {
 
             // Set member since using stored dateStart
             DateTimeFormatter monthYear = DateTimeFormatter.ofPattern("MMM yyyy");
-            if (currentMember.getDateStart() != null) {
-                memberSinceLabel.setText(currentMember.getDateStart().format(monthYear));
+            if (member.getDateStart() != null) {
+                memberSinceLabel.setText(member.getDateStart().format(monthYear));
             } else {
                 memberSinceLabel.setText(LocalDate.now().format(monthYear));
             }
         } else {
-            // No member record found — show default values / maybe return to Home
-            statusLabel.setText("NO MEMBERSHIP");
-            daysRemainingLabel.setText("-");
-            planLabel.setText("No plan");
-            endDateLabel.setText("N/A");
-            priceLabel.setText("-");
-            memberSinceLabel.setText("-");
+            showNoMembershipUI();
         }
+    }
+
+    private void showNoMembershipUI() {
+        statusLabel.setText("NO MEMBERSHIP");
+        daysRemainingLabel.setText("-");
+        planLabel.setText("No plan");
+        endDateLabel.setText("N/A");
+        priceLabel.setText("-");
+        memberSinceLabel.setText("-");
     }
 
     private String formatPlanName(String subscription) {
@@ -182,15 +283,26 @@ public class MemberController {
                                 currentUser.getUsername(),
                                 plan
                         );
-                        requestDAO.createRequest(req);
+                        
+                        // Use reactive DAO
+                        reactiveRequestDAO.createRequest(req)
+                            .doOnSuccess(v -> Platform.runLater(() -> {
+                                // Send WebSocket notification to admins
+                                ClubServerEndpoint.notifyNewRequest(
+                                    req.getId(),
+                                    currentUser.getUsername(),
+                                    plan
+                                );
+                                ClubServerEndpoint.notifyDataRefresh("requests");
 
-                        Alert a = new Alert(Alert.AlertType.INFORMATION);
-                        a.setTitle("Request Sent");
-                        a.setHeaderText(null);
-                        a.setContentText("Your plan change request was sent to the administration.");
-                        a.showAndWait();
-
-                        // refresh UI if needed
+                                Alert a = new Alert(Alert.AlertType.INFORMATION);
+                                a.setTitle("Request Sent");
+                                a.setHeaderText(null);
+                                a.setContentText("Your plan change request was sent to the administration.");
+                                a.showAndWait();
+                            }))
+                            .doOnError(error -> System.err.println("[Member] Failed to create request: " + error.getMessage()))
+                            .subscribe();
                     }
                 }
             }
@@ -226,7 +338,12 @@ public class MemberController {
                 if (currentMember != null) {
                     currentMember.setStatus("EXPIRED");
                     currentMember.setDateEnd(LocalDate.now()); // end today
-                    memberDAO.updateMember(currentMember);
+                    
+                    reactiveMemberDAO.updateMember(currentMember)
+                        .doOnSuccess(v -> Platform.runLater(() -> {
+                            // Notify about status change
+                            ClubServerEndpoint.notifyDataRefresh("members");
+                        })).subscribe();
                 }
 
                 // update user role to VISITOR
@@ -238,6 +355,9 @@ public class MemberController {
                     currentUser.setRole("VISITOR");
                     Session.setCurrentUser(currentUser);
                 }
+
+                // Cleanup WebSocket before navigating
+                cleanup();
 
                 // go back to Home (visitor)
                 try {
@@ -256,6 +376,7 @@ public class MemberController {
     @FXML
     public void changePlan() {
         // Keep compatibility — navigate to Home page to change plan
+        cleanup();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/clubsportif/fxml/Home.fxml"));
             Scene scene = new Scene(loader.load());
@@ -269,6 +390,7 @@ public class MemberController {
 
     @FXML
     public void logout() {
+        cleanup();
         try {
             // Clear session
             Session.clearSession();

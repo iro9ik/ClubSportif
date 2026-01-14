@@ -2,12 +2,17 @@ package com.clubsportif.controller;
 
 import com.clubsportif.config.DatabaseInitializer;
 import com.clubsportif.dao.MemberDAO;
+import com.clubsportif.dao.ReactiveMemberDAO;
+import com.clubsportif.dao.ReactiveRequestDAO;
 import com.clubsportif.dao.RequestDAO;
 import com.clubsportif.dao.UserDAO;
 import com.clubsportif.model.Member;
 import com.clubsportif.model.Request;
 import com.clubsportif.model.User;
+import com.clubsportif.service.ReactiveStatsService;
 import com.clubsportif.service.Session;
+import com.clubsportif.websocket.ClubServerEndpoint;
+import com.clubsportif.websocket.WebSocketClientService;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.DialogPane;
@@ -17,7 +22,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.application.Platform;
 import javafx.beans.binding.DoubleBinding;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -32,6 +36,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import reactor.core.Disposable;
+
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -78,15 +85,25 @@ public class AdminController {
     // ================= DATA =================
     private MemberDAO memberDAO;
     private RequestDAO requestDAO;
+    private ReactiveMemberDAO reactiveMemberDAO;
+    private ReactiveRequestDAO reactiveRequestDAO;
+    private ReactiveStatsService statsService;
     private ObservableList<Member> membersList;
     private ObservableList<Request> requestsList;
     private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yy");
+
+    // ================= REACTIVE & WEBSOCKET =================
+    private WebSocketClientService wsClient;
+    private Disposable statsSubscription;
 
     // ================= INITIALIZATION =================
     @FXML
     public void initialize() {
         memberDAO = new MemberDAO();
         requestDAO = new RequestDAO();
+        reactiveMemberDAO = new ReactiveMemberDAO(memberDAO);
+        reactiveRequestDAO = new ReactiveRequestDAO(requestDAO);
+        statsService = new ReactiveStatsService(reactiveMemberDAO, reactiveRequestDAO);
         membersList = FXCollections.observableArrayList();
         requestsList = FXCollections.observableArrayList();
 
@@ -111,7 +128,79 @@ public class AdminController {
         Platform.runLater(() -> {
             membersTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
             requestsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-        });    
+        });
+
+        // Initialize WebSocket client
+        initializeWebSocket();
+
+        // Start reactive stats subscription for auto-refresh
+        startStatsSubscription();
+    }
+
+    /**
+     * Initialize WebSocket client for real-time notifications.
+     */
+    private void initializeWebSocket() {
+        wsClient = new WebSocketClientService();
+
+        // Handle new membership requests - auto-refresh requests table
+        wsClient.setOnNewMemberRequest(message -> {
+            System.out.println("[Admin] New membership request received");
+            loadRequests();
+            loadDashboardStats();
+        });
+
+        // Handle data refresh messages
+        wsClient.setOnDataRefresh(message -> {
+            String tableType = message.getPayloadString("tableType");
+            System.out.println("[Admin] Data refresh received for: " + tableType);
+            if ("members".equals(tableType)) {
+                loadMembers();
+            } else if ("requests".equals(tableType)) {
+                loadRequests();
+            } else {
+                loadMembers();
+                loadRequests();
+            }
+            loadDashboardStats();
+        });
+
+        // Handle connection state changes
+        wsClient.setOnConnectionStateChanged(connected -> {
+            System.out.println("[Admin] WebSocket connection: " + (connected ? "connected" : "disconnected"));
+        });
+
+        // Connect with admin role
+        User currentUser = Session.getCurrentUser();
+        if (currentUser != null) {
+            wsClient.connect(currentUser.getId(), "ADMIN");
+        }
+    }
+
+    /**
+     * Start reactive stats subscription for periodic dashboard updates.
+     */
+    private void startStatsSubscription() {
+        statsSubscription = statsService.watchStats(Duration.ofSeconds(30))
+            .subscribe(stats -> Platform.runLater(() -> {
+                totalMembersLabel.setText(String.valueOf(stats.getTotalMembers()));
+                activeMembersLabel.setText(String.valueOf(stats.getActiveMembers()));
+                dailyRequestsLabel.setText(String.valueOf(stats.getDailyRequests()));
+            }), error -> {
+                System.err.println("[Admin] Stats subscription error: " + error.getMessage());
+            });
+    }
+
+    /**
+     * Clean up resources when controller is destroyed.
+     */
+    public void cleanup() {
+        if (statsSubscription != null && !statsSubscription.isDisposed()) {
+            statsSubscription.dispose();
+        }
+        if (wsClient != null) {
+            wsClient.shutdown();
+        }
     }
 
     // ================= NAVIGATION =================
@@ -152,6 +241,7 @@ public class AdminController {
 
     @FXML
     public void logout(ActionEvent event) {
+        cleanup();
         Session.logout();
         
         try {
@@ -166,18 +256,15 @@ public class AdminController {
 
     // ================= DASHBOARD =================
     private void loadDashboardStats() {
-        memberDAO.updateMemberStatuses(); // Update statuses first
-        
-        List<Member> allMembers = memberDAO.getAllMembers();
-        totalMembersLabel.setText(String.valueOf(allMembers.size()));
-        
-        long activeCount = allMembers.stream()
-            .filter(m -> "ACTIVE".equals(m.getStatus()))
-            .count();
-        activeMembersLabel.setText(String.valueOf(activeCount));
-        
-        int dailyRequests = requestDAO.getDailyRequestsCount();
-        dailyRequestsLabel.setText(String.valueOf(dailyRequests));
+        reactiveMemberDAO.updateMemberStatuses()
+            .then(statsService.getCurrentStats())
+            .subscribe(stats -> Platform.runLater(() -> {
+                totalMembersLabel.setText(String.valueOf(stats.getTotalMembers()));
+                activeMembersLabel.setText(String.valueOf(stats.getActiveMembers()));
+                dailyRequestsLabel.setText(String.valueOf(stats.getDailyRequests()));
+            }), error -> {
+                System.err.println("[Admin] Failed to load stats: " + error.getMessage());
+            });
     }
 
     // ================= MEMBERS MANAGEMENT =================
@@ -237,9 +324,15 @@ public class AdminController {
     }
 
     private void loadMembers() {
-        memberDAO.updateMemberStatuses();
-        membersList.clear();
-        membersList.addAll(memberDAO.getAllMembers());
+        reactiveMemberDAO.updateMemberStatuses()
+            .thenMany(reactiveMemberDAO.getAllMembers())
+            .collectList()
+            .subscribe(members -> Platform.runLater(() -> {
+                membersList.clear();
+                membersList.addAll(members);
+            }), error -> {
+                System.err.println("[Admin] Failed to load members: " + error.getMessage());
+            });
     }
 
     @FXML
@@ -289,15 +382,24 @@ public class AdminController {
                 LocalDate newEndDate = calculateEndDate(newPlan);
                 member.setSubscription(newPlan);
                 member.setDateEnd(newEndDate);
-                memberDAO.updateMember(member);
-                loadMembers();
-                loadDashboardStats();
+                
+                reactiveMemberDAO.updateMember(member)
+                    .doOnSuccess(v -> Platform.runLater(() -> {
+                        loadMembers();
+                        loadDashboardStats();
+                        // Notify status change
+                        ClubServerEndpoint.notifyDataRefresh("members");
+                    })).subscribe();
             } else if (response.getButtonData() == ButtonBar.ButtonData.OTHER) {
                 // Cancel subscription
                 member.setStatus("EXPIRED");
-                memberDAO.updateMember(member);
-                loadMembers();
-                loadDashboardStats();
+                
+                reactiveMemberDAO.updateMember(member)
+                    .doOnSuccess(v -> Platform.runLater(() -> {
+                        loadMembers();
+                        loadDashboardStats();
+                        ClubServerEndpoint.notifyDataRefresh("members");
+                    })).subscribe();
             }
         });
     }
@@ -333,19 +435,22 @@ public class AdminController {
             if (response == ButtonType.OK && !nomField.getText().isEmpty() 
                 && !prenomField.getText().isEmpty() && subscriptionCombo.getValue() != null) {
                 
-                    LocalDate startDate = LocalDate.now();
-                    LocalDate endDate = calculateEndDate(subscriptionCombo.getValue());
-                    Member newMember = new Member(
-                        nomField.getText(),
-                        prenomField.getText(),
-                        subscriptionCombo.getValue(),
-                        startDate,
-                        endDate
-                    );
-                    memberDAO.createMember(newMember);
-
-                loadMembers();
-                loadDashboardStats();
+                LocalDate startDate = LocalDate.now();
+                LocalDate endDate = calculateEndDate(subscriptionCombo.getValue());
+                Member newMember = new Member(
+                    nomField.getText(),
+                    prenomField.getText(),
+                    subscriptionCombo.getValue(),
+                    startDate,
+                    endDate
+                );
+                
+                reactiveMemberDAO.createMember(newMember)
+                    .doOnSuccess(v -> Platform.runLater(() -> {
+                        loadMembers();
+                        loadDashboardStats();
+                        ClubServerEndpoint.notifyDataRefresh("members");
+                    })).subscribe();
             }
         });
     }
@@ -451,8 +556,14 @@ public class AdminController {
     }
 
     private void loadRequests() {
-        requestsList.clear();
-        requestsList.addAll(requestDAO.getAllRequests());
+        reactiveRequestDAO.getAllRequests()
+            .collectList()
+            .subscribe(requests -> Platform.runLater(() -> {
+                requestsList.clear();
+                requestsList.addAll(requests);
+            }), error -> {
+                System.err.println("[Admin] Failed to load requests: " + error.getMessage());
+            });
     }
 
     @FXML
@@ -462,56 +573,110 @@ public class AdminController {
     }
 
     private void handleAcceptRequest(Request request) {
-        requestDAO.updateRequestStatus(request.getId(), "ACCEPTED");
-        
-        // Check if member already exists for this user
-        Member existingMember = memberDAO.getMemberByUserId(request.getUserId());
-        
-        if (existingMember == null) {
-            // Create member from request only if doesn't exist
-            LocalDate startDate = LocalDate.now();
-            LocalDate endDate = calculateEndDate(request.getSubscription());
-            Member newMember = new Member(
-                request.getUserId(),     // user_id
-                request.getNom(),
-                request.getPrenom(),
-                request.getSubscription(),
-                startDate,
-                endDate
-            );
-            memberDAO.createMember(newMember);
+        reactiveRequestDAO.updateRequestStatus(request.getId(), "ACCEPTED")
+            .then(reactiveMemberDAO.getMemberByUserId(request.getUserId()))
+            .defaultIfEmpty(new Member(0, 0, "", "", "", LocalDate.now(), LocalDate.now(), ""))
+            .doOnSuccess(existingMemberOrEmpty -> Platform.runLater(() -> {
+                LocalDate endDate;
+                
+                // Check if this is our empty placeholder (id=0) or actual member
+                if (existingMemberOrEmpty.getId() == 0) {
+                    // NEW MEMBER: Create member from request with start from today
+                    LocalDate startDate = LocalDate.now();
+                    endDate = calculateEndDate(request.getSubscription());
+                    Member newMember = new Member(
+                        request.getUserId(),
+                        request.getNom(),
+                        request.getPrenom(),
+                        request.getSubscription(),
+                        startDate,
+                        endDate
+                    );
+                    memberDAO.createMember(newMember);
+                    System.out.println("[Admin] Created new member with end date: " + endDate);
+                } else {
+                    // EXISTING MEMBER (RENEWAL): Add months to current end date
+                    // If current subscription hasn't expired, add to existing end date
+                    // If expired, start from today
+                    LocalDate baseDate = existingMemberOrEmpty.getDateEnd();
+                    if (baseDate.isBefore(LocalDate.now())) {
+                        baseDate = LocalDate.now(); // Start fresh if expired
+                    }
+                    
+                    endDate = addSubscriptionToDate(baseDate, request.getSubscription());
+                    existingMemberOrEmpty.setSubscription(request.getSubscription());
+                    existingMemberOrEmpty.setDateEnd(endDate);
+                    existingMemberOrEmpty.setStatus("ACTIVE");
+                    memberDAO.updateMember(existingMemberOrEmpty);
+                    System.out.println("[Admin] Renewed member subscription. New end date: " + endDate);
+                }
 
-        }
+                // Update user role
+                UserDAO userDAO = new UserDAO();
+                try {
+                    userDAO.updateUserRole(request.getUserId(), "MEMBER");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-        // Update user role to MEMBER
-        UserDAO userDAO = new UserDAO();
-        try {
-            userDAO.updateUserRole(request.getUserId(), "MEMBER");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        
-        loadRequests();
-        loadMembers();
-        loadDashboardStats();
-        
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Request Accepted");
-        alert.setHeaderText(null);
-        alert.setContentText("Request accepted and member added successfully!");
-        alert.showAndWait();
+                loadRequests();
+                loadMembers();
+                loadDashboardStats();
+
+                // Send WebSocket notification to member
+                ClubServerEndpoint.notifyRequestAccepted(
+                    request.getUserId(),
+                    request.getId(),
+                    request.getSubscription(),
+                    endDate.format(DateTimeFormatter.ISO_LOCAL_DATE)
+                );
+                ClubServerEndpoint.notifyDataRefresh("all");
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Request Accepted");
+                alert.setHeaderText(null);
+                alert.setContentText("Request accepted and member subscription updated!");
+                alert.showAndWait();
+            }))
+            .doOnError(error -> System.err.println("[Admin] Failed to accept request: " + error.getMessage()))
+            .subscribe();
     }
+
+    /**
+     * Add subscription duration to a base date.
+     * This allows renewals to extend existing subscriptions.
+     */
+    private LocalDate addSubscriptionToDate(LocalDate baseDate, String subscription) {
+        return switch (subscription) {
+            case "1 month" -> baseDate.plusMonths(1);
+            case "3 months" -> baseDate.plusMonths(3);
+            case "1 year" -> baseDate.plusYears(1);
+            default -> baseDate.plusMonths(1);
+        };
+    }
+
 
     private void handleDeclineRequest(Request request) {
-        requestDAO.updateRequestStatus(request.getId(), "DECLINED");
-        loadRequests();
-        loadDashboardStats();
-        
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Request Declined");
-        alert.setHeaderText(null);
-        alert.setContentText("Request has been declined.");
-        alert.showAndWait();
+        reactiveRequestDAO.updateRequestStatus(request.getId(), "DECLINED")
+            .doOnSuccess(v -> Platform.runLater(() -> {
+                loadRequests();
+                loadDashboardStats();
+
+                // Send WebSocket notification to member
+                ClubServerEndpoint.notifyRequestDeclined(
+                    request.getUserId(),
+                    request.getId(),
+                    null
+                );
+                ClubServerEndpoint.notifyDataRefresh("requests");
+
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Request Declined");
+                alert.setHeaderText(null);
+                alert.setContentText("Request has been declined.");
+                alert.showAndWait();
+            }))
+            .doOnError(error -> System.err.println("[Admin] Failed to decline request: " + error.getMessage()))
+            .subscribe();
     }
 }
-

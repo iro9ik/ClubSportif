@@ -2,22 +2,22 @@ package com.clubsportif.controller;
 
 import com.clubsportif.config.DatabaseInitializer;
 import com.clubsportif.dao.MemberDAO;
+import com.clubsportif.dao.ReactiveRequestDAO;
 import com.clubsportif.dao.RequestDAO;
 import com.clubsportif.model.Member;
 import com.clubsportif.model.Request;
 import com.clubsportif.model.User;
 import com.clubsportif.service.Session;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
+import com.clubsportif.websocket.ClubServerEndpoint;
+import com.clubsportif.websocket.WebSocketClientService;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -46,16 +46,18 @@ public class HomeController {
     // ================= STATE =================
     private String selectedPlan;
     private RequestDAO requestDAO;
+    private ReactiveRequestDAO reactiveRequestDAO;
     private MemberDAO memberDAO;
     private int currentUserId;
-
-    // carousel autoplay
-    private Timeline featuresAutoPlay;
+    
+    // WebSocket client for receiving notifications
+    private WebSocketClientService wsClient;
 
     // ================= INITIALIZATION =================
     @FXML
     public void initialize() {
         requestDAO = new RequestDAO();
+        reactiveRequestDAO = new ReactiveRequestDAO(requestDAO);
         memberDAO = new MemberDAO();
 
         // Initialize database tables
@@ -66,8 +68,8 @@ public class HomeController {
         if (currentUser != null) {
             currentUserId = currentUser.getId();
 
-            // Home page is ONLY for USER role (visitors)
-            // Members should be routed to Member.fxml by LoginController
+            // Initialize WebSocket for visitors (to receive acceptance notifications)
+            initializeWebSocket(currentUser);
 
             // Check if user has a pending request
             if (requestDAO.hasActiveRequest(currentUserId)) {
@@ -83,6 +85,67 @@ public class HomeController {
         }
     }
 
+    /**
+     * Initialize WebSocket client for real-time notifications.
+     */
+    private void initializeWebSocket(User user) {
+        wsClient = new WebSocketClientService();
+
+        // Handle request acceptance - redirect to Member page
+        wsClient.setOnRequestAccepted(message -> {
+            System.out.println("[Home] Request accepted notification received!");
+            
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("🎉 Request Accepted!");
+            alert.setHeaderText("Your membership request has been approved!");
+            alert.setContentText("You are now a member! Redirecting to member page...");
+            alert.showAndWait();
+
+            // Update user role in session
+            user.setRole("MEMBER");
+            Session.setCurrentUser(user);
+            
+            // Cleanup and navigate to Member page
+            cleanup();
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/clubsportif/fxml/Member.fxml"));
+                Scene scene = new Scene(loader.load());
+                Stage stage = (Stage) pricingBox.getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        // Handle request declined notification
+        wsClient.setOnRequestDeclined(message -> {
+            System.out.println("[Home] Request declined notification received");
+            
+            String reason = message.getPayloadString("reason");
+            
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Request Declined");
+            alert.setHeaderText("Your membership request was not approved");
+            alert.setContentText(reason != null ? reason : "Please contact administration for more details.");
+            alert.showAndWait();
+
+            // Show pricing plans again
+            Platform.runLater(this::showPricingPlans);
+        });
+
+        // Connect with USER role (visitor)
+        wsClient.connect(user.getId(), "USER");
+    }
+
+    /**
+     * Clean up WebSocket resources.
+     */
+    public void cleanup() {
+        if (wsClient != null) {
+            wsClient.shutdown();
+        }
+    }
 
     // ================= DISPLAY METHODS =================
     private void showPricingPlans() {
@@ -155,9 +218,22 @@ public class HomeController {
                 selectedPlan
             );
 
-            requestDAO.createRequest(request);
-            confirmDialog.setVisible(false);
-            showWelcomeMessage();
+            // Use reactive DAO
+            reactiveRequestDAO.createRequest(request)
+                .doOnSuccess(v -> Platform.runLater(() -> {
+                    // Send WebSocket notification to admins
+                    ClubServerEndpoint.notifyNewRequest(
+                        request.getId(),
+                        currentUser.getUsername(),
+                        selectedPlan
+                    );
+                    ClubServerEndpoint.notifyDataRefresh("requests");
+                    
+                    confirmDialog.setVisible(false);
+                    showWelcomeMessage();
+                }))
+                .doOnError(error -> System.err.println("[Home] Failed to create request: " + error.getMessage()))
+                .subscribe();
         }
     }
 
@@ -182,13 +258,22 @@ public class HomeController {
             if (!requests.isEmpty()) {
                 Request latestRequest = requests.get(0); // Most recent
                 if ("PENDING".equals(latestRequest.getStatus())) {
-                    // Delete the request completely
-                    requestDAO.deleteRequest(latestRequest.getId());
+                    // Delete the request using reactive DAO
+                    reactiveRequestDAO.deleteRequest(latestRequest.getId())
+                        .doOnSuccess(v -> Platform.runLater(() -> {
+                            // Notify admins about data refresh
+                            ClubServerEndpoint.notifyDataRefresh("requests");
+                            
+                            // Hide welcome box and show pricing plans
+                            welcomeBox.setVisible(false);
+                            pricingBox.setVisible(true);
+                        })).subscribe();
+                    return;
                 }
             }
         }
 
-        // Hide welcome box and show pricing plans
+        // Fallback: Hide welcome box and show pricing plans
         welcomeBox.setVisible(false);
         pricingBox.setVisible(true);
     }
@@ -204,6 +289,7 @@ public class HomeController {
 
     @FXML
     public void logout(ActionEvent event) {
+        cleanup();
         try {
             // Clear session
             Session.clearSession();
