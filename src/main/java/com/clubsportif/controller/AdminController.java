@@ -42,6 +42,10 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class AdminController {
 
@@ -343,6 +347,75 @@ public class AdminController {
     @FXML
     public void addMember() {
         showAddMemberDialog();
+    }
+
+    @FXML
+    public void exportMembersToCsv() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Export Members to CSV");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV Files", "*.csv"));
+        fileChooser.setInitialFileName("members_export_" + LocalDate.now().toString() + ".csv");
+        
+        File file = fileChooser.showSaveDialog(membersTable.getScene().getWindow());
+        
+        if (file != null) {
+            reactiveMemberDAO.getAllMembers()
+                .collectList()
+                .subscribe(members -> {
+                    try (FileWriter writer = new FileWriter(file)) {
+                        // Write header
+                        writer.write("ID,Last Name,First Name,Subscription,Start Date,End Date,Status\n");
+                        
+                        // Write data
+                        for (Member member : members) {
+                            writer.write(String.format("%d,%s,%s,%s,%s,%s,%s\n",
+                                member.getId(),
+                                escapeCsv(member.getNom()),
+                                escapeCsv(member.getPrenom()),
+                                escapeCsv(member.getSubscription()),
+                                member.getDateStart(),
+                                member.getDateEnd(),
+                                member.getStatus()
+                            ));
+                        }
+                        
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Export Successful");
+                            alert.setHeaderText(null);
+                            alert.setContentText("Members exported successfully to " + file.getName());
+                            alert.showAndWait();
+                        });
+                        
+                    } catch (IOException e) {
+                        Platform.runLater(() -> {
+                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                            alert.setTitle("Export Error");
+                            alert.setHeaderText("Failed to export members");
+                            alert.setContentText(e.getMessage());
+                            alert.showAndWait();
+                        });
+                        e.printStackTrace();
+                    }
+                }, error -> {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Export Error");
+                        alert.setHeaderText("Failed to fetch members");
+                        alert.setContentText(error.getMessage());
+                        alert.showAndWait();
+                    });
+                });
+        }
+    }
+
+    private String escapeCsv(String data) {
+        if (data == null) return "";
+        String escapedData = data.replaceAll("\"", "\"\"");
+        if (escapedData.contains(",") || escapedData.contains("\n") || escapedData.contains("\"")) {
+            data = "\"" + escapedData + "\"";
+        }
+        return data;
     }
 
     private void showMemberOptionsDialog(Member member) {

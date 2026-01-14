@@ -117,11 +117,7 @@
     -fx-cursor: hand;
 }
 
-.button-primary:hover {
-    -fx-background-color: -accent-hover;
-    -fx-scale-y: 1.05;
-    -fx-scale-x: 1.05;
-}
+
 
 .button-secondary {
     -fx-background-color: -secondary;
@@ -133,11 +129,7 @@
     -fx-cursor: hand;
 }
 
-.button-secondary:hover {
-    -fx-background-color: -secondary-hover;
-    -fx-scale-y: 1.05;
-    -fx-scale-x: 1.05;
-}
+
 
 .button-secondary-outline {
     -fx-background-color: transparent;
@@ -152,11 +144,7 @@
     -fx-cursor: hand;
 }
 
-.button-secondary-outline:hover {
-    -fx-background-color: rgba(34, 197, 94, 0.1);
-    -fx-scale-y: 1.05;
-    -fx-scale-x: 1.05;
-}
+
 
 .button-danger {
     -fx-background-color: -danger;
@@ -168,11 +156,7 @@
     -fx-cursor: hand;
 }
 
-.button-danger:hover {
-    -fx-background-color: -danger-hover;
-    -fx-scale-y: 1.05;
-    -fx-scale-x: 1.05;
-}
+
 
 .button-ghost {
     -fx-background-color: transparent;
@@ -187,10 +171,7 @@
     -fx-cursor: hand;
 }
 
-.button-ghost:hover {
-    -fx-text-fill: -text-primary;
-    -fx-border-color: -text-secondary;
-}
+
 
 /* =========================
    NAVBAR
@@ -216,9 +197,7 @@
     -fx-padding: 8 16;
 }
 
-.nav-button:hover {
-    -fx-text-fill: -text-primary;
-}
+
 
 .logout-button {
     -fx-background-color: transparent;
@@ -227,9 +206,7 @@
     -fx-padding: 8 16;
 }
 
-.logout-button:hover {
-    -fx-text-fill: -danger;
-}
+
 
 /* =========================
    PRICING CARDS
@@ -389,10 +366,7 @@
     -fx-alignment: CENTER_LEFT;
 }
 
-.sidebar-button:hover {
-    -fx-background-color: rgba(255, 255, 255, 0.05);
-    -fx-text-fill: -text-primary;
-}
+
 
 .sidebar-button.active {
     -fx-background-color: -accent;
@@ -508,9 +482,7 @@
     -fx-min-width: 70;
 }
 
-.table-action-primary:hover {
-    -fx-background-color: #1ea34f;
-}
+
 
 .table-action-secondary {
     -fx-background-color: transparent;
@@ -526,9 +498,7 @@
     -fx-min-width: 70;
 }
 
-.table-action-secondary:hover {
-    -fx-background-color: rgba(34, 197, 94, 0.1);
-}
+
 
 .table-options-button {
     -fx-background-color: -accent;
@@ -541,9 +511,7 @@
     -fx-min-width: 80;
 }
 
-.table-options-button:hover {
-    -fx-background-color: #1ea34f;
-}
+
 
 /* Status Labels */
 .status-active {
@@ -599,57 +567,274 @@
 }
 
 /* Member Interface - Modern & Responsive */
-.page-title { -fx-font-size: 20px; -fx-font-weight: 700; -fx-text-fill: -text-primary; }
-.member-welcome { -fx-font-size: 24px; -fx-font-weight: 700; -fx-text-fill: -text-primary; }
-.member-subtitle { -fx-font-size: 13px; -fx-text-fill: -text-secondary; }
-.subscription-card { -fx-background-color: -bg-card; -fx-background-radius: 12; }
-.section-title { -fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: -text-secondary; -fx-letter-spacing: 0.5; }
-.info-label { -fx-font-size: 11px; -fx-text-fill: -text-secondary; -fx-letter-spacing: 0.5; }
-.status-badge { -fx-font-size: 12px; -fx-font-weight: 600; -fx-padding: 4 12; -fx-background-color: rgba(34,197,94,0.15); -fx-background-radius: 12; }
-.status-indicator-active { -fx-font-size: 14px; -fx-text-fill: -accent; }
-.status-indicator-expired { -fx-font-size: 14px; -fx-text-fill: -danger; }
-.plan-name { -fx-font-size: 18px; -fx-font-weight: 700; -fx-text-fill: -text-primary; }
-.plan-date { -fx-font-size: 12px; -fx-text-fill: rgba(255,255,255,0.5); }
-.plan-price { -fx-font-size: 20px; -fx-font-weight: 700; -fx-text-fill: -accent; }
-.plan-period { -fx-font-size: 11px; -fx-text-fill: -text-secondary; }
-.days-remaining { -fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: -accent; }
-.expired-text { -fx-text-fill: -danger !important; }
-.benefit-check { -fx-font-size: 14px; -fx-font-weight: 700; -fx-text-fill: -accent; }
-.benefit-text { -fx-font-size: 13px; -fx-text-fill: -text-primary; }
-.stat-card { -fx-background-color: -bg-surface; -fx-background-radius: 12; -fx-padding: 20; -fx-min-height: 100; }
-.stat-number { -fx-font-size: 24px; -fx-font-weight: 700; -fx-text-fill: -accent; }
-.stat-label { -fx-font-size: 11px; -fx-text-fill: -text-secondary; -fx-text-alignment: center; }
-.scroll-pane { -fx-background-color: transparent; -fx-background: transparent; }
-.scroll-pane .viewport { -fx-background-color: transparent; }
+.page-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -text-primary;
+}
+
+.member-welcome {
+    -fx-font-size: 24px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -text-primary;
+}
+
+.member-subtitle {
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-secondary;
+}
+
+.subscription-card {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: 12;
+}
+
+.section-title {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -text-secondary;
+    -fx-letter-spacing: 0.5;
+}
+
+.info-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: -text-secondary;
+    -fx-letter-spacing: 0.5;
+}
+
+.status-badge {
+    -fx-font-size: 12px;
+    -fx-font-weight: 600;
+    -fx-padding: 4 12;
+    -fx-background-color: rgba(34, 197, 94, 0.15);
+    -fx-background-radius: 12;
+}
+
+.status-indicator-active {
+    -fx-font-size: 14px;
+    -fx-text-fill: -accent;
+}
+
+.status-indicator-expired {
+    -fx-font-size: 14px;
+    -fx-text-fill: -danger;
+}
+
+.plan-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -text-primary;
+}
+
+.plan-date {
+    -fx-font-size: 12px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.plan-price {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -accent;
+}
+
+.plan-period {
+    -fx-font-size: 11px;
+    -fx-text-fill: -text-secondary;
+}
+
+.days-remaining {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -accent;
+}
+
+.expired-text {
+    -fx-text-fill: -danger !important;
+}
+
+.benefit-check {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -accent;
+}
+
+.benefit-text {
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-primary;
+}
+
+.stat-card {
+    -fx-background-color: -bg-surface;
+    -fx-background-radius: 12;
+    -fx-padding: 20;
+    -fx-min-height: 100;
+}
+
+.stat-number {
+    -fx-font-size: 24px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -accent;
+}
+
+.stat-label {
+    -fx-font-size: 11px;
+    -fx-text-fill: -text-secondary;
+    -fx-text-alignment: center;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
 
 
 /* Compact Member Interface */
-.member-container { -fx-background-color: transparent; }
-.header-title-small { -fx-font-size: 20px; -fx-font-weight: 600; -fx-text-fill: -text-primary; }
-.member-welcome-compact { -fx-font-size: 24px; -fx-font-weight: 700; -fx-text-fill: -text-primary; }
-.member-subtitle-compact { -fx-font-size: 14px; -fx-text-fill: -text-secondary; }
-.member-card { -fx-background-color: -bg-card; -fx-background-radius: 12; -fx-padding: 24; }
-.status-dot-active { -fx-font-size: 12px; -fx-text-fill: -accent; }
-.status-dot-expired { -fx-font-size: 12px; -fx-text-fill: -danger; }
-.status-text-active { -fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: -accent; }
-.status-text-expired { -fx-font-size: 13px; -fx-font-weight: 600; -fx-text-fill: -danger; }
-.days-compact { -fx-font-size: 12px; -fx-text-fill: -text-secondary; -fx-background-color: rgba(34,197,94,0.1); -fx-background-radius: 6; -fx-padding: 4 12; }
-.label-compact { -fx-font-size: 11px; -fx-font-weight: 600; -fx-text-fill: -text-secondary; -fx-letter-spacing: 1; }
-.plan-name-compact { -fx-font-size: 18px; -fx-font-weight: 600; -fx-text-fill: -text-primary; }
-.plan-date-compact { -fx-font-size: 13px; -fx-text-fill: rgba(255,255,255,0.5); }
-.price-compact { -fx-font-size: 20px; -fx-font-weight: 700; -fx-text-fill: -accent; }
-.check-compact { -fx-font-size: 14px; -fx-font-weight: 700; -fx-text-fill: -accent; }
-.benefit-compact { -fx-font-size: 13px; -fx-text-fill: -text-primary; }
-.stat-card-compact { -fx-background-color: -bg-surface; -fx-background-radius: 10; -fx-padding: 20; }
-.stat-label-compact { -fx-font-size: 11px; -fx-font-weight: 600; -fx-text-fill: -text-secondary; -fx-letter-spacing: 1; }
-.stat-value-compact { -fx-font-size: 24px; -fx-font-weight: 700; -fx-text-fill: -accent; }
-.stat-sub-compact { -fx-font-size: 12px; -fx-text-fill: -text-secondary; }
-.scroll-pane { -fx-background-color: transparent; -fx-background: transparent; }
-.scroll-pane .viewport { -fx-background-color: transparent; }
-.scroll-pane .scroll-bar:vertical { -fx-pref-width: 8; -fx-background-color: transparent; }
-.scroll-pane .scroll-bar:vertical .track { -fx-background-color: transparent; }
-.scroll-pane .scroll-bar:vertical .thumb { -fx-background-color: rgba(255,255,255,0.2); -fx-background-radius: 4; }
-.scroll-pane .scroll-bar:vertical .thumb:hover { -fx-background-color: rgba(255,255,255,0.3); }
+.member-container {
+    -fx-background-color: transparent;
+}
+
+.header-title-small {
+    -fx-font-size: 20px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -text-primary;
+}
+
+.member-welcome-compact {
+    -fx-font-size: 24px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -text-primary;
+}
+
+.member-subtitle-compact {
+    -fx-font-size: 14px;
+    -fx-text-fill: -text-secondary;
+}
+
+.member-card {
+    -fx-background-color: -bg-card;
+    -fx-background-radius: 12;
+    -fx-padding: 24;
+}
+
+.status-dot-active {
+    -fx-font-size: 12px;
+    -fx-text-fill: -accent;
+}
+
+.status-dot-expired {
+    -fx-font-size: 12px;
+    -fx-text-fill: -danger;
+}
+
+.status-text-active {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -accent;
+}
+
+.status-text-expired {
+    -fx-font-size: 13px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -danger;
+}
+
+.days-compact {
+    -fx-font-size: 12px;
+    -fx-text-fill: -text-secondary;
+    -fx-background-color: rgba(34, 197, 94, 0.1);
+    -fx-background-radius: 6;
+    -fx-padding: 4 12;
+}
+
+.label-compact {
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -text-secondary;
+    -fx-letter-spacing: 1;
+}
+
+.plan-name-compact {
+    -fx-font-size: 18px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -text-primary;
+}
+
+.plan-date-compact {
+    -fx-font-size: 13px;
+    -fx-text-fill: rgba(255, 255, 255, 0.5);
+}
+
+.price-compact {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -accent;
+}
+
+.check-compact {
+    -fx-font-size: 14px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -accent;
+}
+
+.benefit-compact {
+    -fx-font-size: 13px;
+    -fx-text-fill: -text-primary;
+}
+
+.stat-card-compact {
+    -fx-background-color: -bg-surface;
+    -fx-background-radius: 10;
+    -fx-padding: 20;
+}
+
+.stat-label-compact {
+    -fx-font-size: 11px;
+    -fx-font-weight: 600;
+    -fx-text-fill: -text-secondary;
+    -fx-letter-spacing: 1;
+}
+
+.stat-value-compact {
+    -fx-font-size: 24px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -accent;
+}
+
+.stat-sub-compact {
+    -fx-font-size: 12px;
+    -fx-text-fill: -text-secondary;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-pref-width: 8;
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: rgba(255, 255, 255, 0.2);
+    -fx-background-radius: 4;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.3);
+}
 
 /* =========================
    MODERN TABLE IMPROVEMENTS
@@ -659,7 +844,7 @@
     -fx-background-color: -bg-card;
     -fx-background-radius: 10;
     -fx-padding: 8 10;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.28), 10, 0.25, 0, 4);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.28), 10, 0.25, 0, 4);
     -fx-font-size: 13px;
 }
 
@@ -668,7 +853,7 @@
     -fx-background-color: transparent;
 }
 
-.modern-table .column-header, 
+.modern-table .column-header,
 .modern-table .column-header .label {
     -fx-font-size: 13px;
     -fx-font-weight: 700;
@@ -680,8 +865,10 @@
 /* table cell: remove vertical borders and use a single bottom divider for rows */
 .modern-table .table-row-cell {
     -fx-background-color: transparent;
-    -fx-padding: 0;                      /* row padding controlled by cell */
-    -fx-border-color: transparent transparent rgba(255,255,255,0.05) transparent; /* bottom border only */
+    -fx-padding: 0;
+    /* row padding controlled by cell */
+    -fx-border-color: transparent transparent rgba(255, 255, 255, 0.05) transparent;
+    /* bottom border only */
     -fx-border-width: 0 0 1 0;
 }
 
@@ -697,13 +884,14 @@
     -fx-text-fill: -text-primary;
     -fx-font-size: 14px;
     -fx-alignment: CENTER_LEFT;
-    -fx-border-color: transparent;       /* make sure no vertical border */
+    -fx-border-color: transparent;
+    /* make sure no vertical border */
 }
 
 /* focused / selected row highlight */
 .modern-table .table-row-cell:focused,
 .modern-table .table-row-cell:selected {
-    -fx-background-color: rgba(34,197,94,0.06);
+    -fx-background-color: rgba(34, 197, 94, 0.06);
 }
 
 /* remove default column resize UI visuals */
@@ -718,6 +906,7 @@
     -fx-pref-width: 10px;
     -fx-background-color: transparent;
 }
+
 .modern-table .scroll-bar:vertical .thumb {
     -fx-background-color: -accent;
     -fx-background-radius: 6;
@@ -736,7 +925,7 @@
     -fx-font-weight: 600;
     -fx-font-size: 13px;
     -fx-cursor: hand;
-    -fx-effect: dropshadow(gaussian, rgba(34,197,94,0.18), 6, 0.2, 0, 2);
+    -fx-effect: dropshadow(gaussian, rgba(34, 197, 94, 0.18), 6, 0.2, 0, 2);
 }
 
 /* Accept / primary action inside requests row */
@@ -753,7 +942,7 @@
 .table-action-secondary {
     -fx-background-color: transparent;
     -fx-text-fill: -text-secondary;
-    -fx-border-color: rgba(255,255,255,0.06);
+    -fx-border-color: rgba(255, 255, 255, 0.06);
     -fx-border-width: 1.5;
     -fx-background-radius: 10;
     -fx-padding: 6 12;
@@ -780,8 +969,11 @@
     -fx-font-size: 14px;
     -fx-line-spacing: 1.2;
 }
+
 @media screen and (max-width: 1100px) {
-    .table-cell-label { -fx-font-size: 13px; }
+    .table-cell-label {
+        -fx-font-size: 13px;
+    }
 }
 
 .dialog-pane .button {
@@ -789,14 +981,23 @@
 }
 
 /* re-use existing button styles for dialog buttons */
-.dialog-pane .button.button-primary { }
-.dialog-pane .button.button-danger { }
-.dialog-pane .button.button-ghost { }
+.dialog-pane .button.button-primary {}
+
+.dialog-pane .button.button-danger {}
+
+.dialog-pane .button.button-ghost {}
 
 /* fine adjust for compactness on smaller sizes */
 @media screen and (max-width: 1100px) {
-    .modern-table .table-cell { -fx-padding: 10 12; -fx-font-size: 13px; }
-    .modern-table .column-header, .modern-table .column-header .label { -fx-font-size: 12px; }
+    .modern-table .table-cell {
+        -fx-padding: 10 12;
+        -fx-font-size: 13px;
+    }
+
+    .modern-table .column-header,
+    .modern-table .column-header .label {
+        -fx-font-size: 12px;
+    }
 }
 
 
@@ -812,8 +1013,9 @@
     -fx-padding: 10 18;
     -fx-cursor: hand;
 }
+
 .button-danger-outline:hover {
-    -fx-background-color: rgba(239,68,68,0.06);
+    -fx-background-color: rgba(239, 68, 68, 0.06);
 }
 
 /* =========================
@@ -835,7 +1037,7 @@
     -fx-background-color: -bg-card;
     -fx-background-radius: 14;
     -fx-padding: 28;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.32), 14, 0.2, 0, 6);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.32), 14, 0.2, 0, 6);
     -fx-alignment: CENTER_LEFT;
 }
 
@@ -846,6 +1048,7 @@
     -fx-text-fill: -text-primary;
     -fx-padding: 0 0 8 0;
 }
+
 .feature-desc {
     -fx-font-size: 15px;
     -fx-text-fill: -text-secondary;
@@ -864,7 +1067,7 @@
     -fx-background-color: -bg-pricing;
     -fx-background-radius: 18;
     -fx-padding: 32;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 18, 0.25, 0, 10);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.35), 18, 0.25, 0, 10);
     -fx-alignment: CENTER;
 }
 
@@ -877,7 +1080,11 @@
 }
 
 /* slightly larger plan-title to match new scale */
-.plan-title { -fx-font-size: 20px; -fx-font-weight: 700; -fx-text-fill: -text-primary; }
+.plan-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: 700;
+    -fx-text-fill: -text-primary;
+}
 
 /* Popular card: green outline, glow, and scale */
 .price-card.popular {
@@ -886,7 +1093,7 @@
     -fx-border-radius: 18;
     -fx-scale-x: 1.06;
     -fx-scale-y: 1.06;
-    -fx-effect: dropshadow(gaussian, rgba(34,197,94,0.14), 30, 0.2, 0, 12), dropshadow(gaussian, rgba(0,0,0,0.35), 18, 0.25, 0, 10);
+    -fx-effect: dropshadow(gaussian, rgba(34, 197, 94, 0.14), 30, 0.2, 0, 12), dropshadow(gaussian, rgba(0, 0, 0, 0.35), 18, 0.25, 0, 10);
     -fx-background-color: linear-gradient(to bottom, derive(-bg-pricing, 2%), -bg-pricing);
 }
 
@@ -909,10 +1116,22 @@
 
 /* Make cards responsive: shrink on small screens */
 @media screen and (max-width: 1000px) {
-    .price { -fx-font-size: 36px; }
-    .price-card.popular { -fx-scale-x: 1; -fx-scale-y: 1; }
-    .pricing-container { -fx-spacing: 20; -fx-padding: 20 12; }
+    .price {
+        -fx-font-size: 36px;
+    }
+
+    .price-card.popular {
+        -fx-scale-x: 1;
+        -fx-scale-y: 1;
+    }
+
+    .pricing-container {
+        -fx-spacing: 20;
+        -fx-padding: 20 12;
+    }
 }
 
 /* small visual tweak to center popular card elevation */
-.price-card.popular { -fx-translate-y: -8; }
+.price-card.popular {
+    -fx-translate-y: -8;
+}

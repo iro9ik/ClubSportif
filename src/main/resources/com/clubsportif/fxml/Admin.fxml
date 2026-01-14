@@ -94,7 +94,7 @@
                         <Label styleClass="page-title" text="Members Management" />
                         <Region HBox.hgrow="ALWAYS" />
                         <Button onAction="#addMember" styleClass="button-primary" text="+ Add Member" />
-                        <Button onAction="#refreshMembers" styleClass="button-secondary" text="🔄 Refresh" />
+                        <Button onAction="#exportMembersToCsv" styleClass="button-secondary" text="Export CSV" />
                     </HBox>
 
                     <!-- MEMBERS TABLE -->
@@ -124,7 +124,6 @@
                     <HBox alignment="CENTER_LEFT" spacing="16">
                         <Label styleClass="page-title" text="Membership Requests" />
                         <Region HBox.hgrow="ALWAYS" />
-                        <Button onAction="#refreshRequests" styleClass="button-secondary" text="🔄 Refresh" />
                     </HBox>
 
                     <!-- REQUESTS TABLE -->
