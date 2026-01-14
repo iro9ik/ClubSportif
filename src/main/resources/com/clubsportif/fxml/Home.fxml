@@ -60,7 +60,7 @@
 
 
 
-                <!-- ================= PRICING BOX ================= -->
+                <!-- PRICING BOX -->
                 <HBox fx:id="pricingBox" alignment="CENTER" spacing="36" styleClass="pricing-container">
                     <VBox prefHeight="260.0" prefWidth="260.0" spacing="16" styleClass="card price-card">
                         <Label styleClass="plan-title" text="Monthly Plan" />
@@ -88,7 +88,7 @@
                     </VBox>
                 </HBox>
 
-                <!-- WELCOME BOX (shown after plan selection) -->
+                <!-- WELCOME BOX -->
                 <VBox fx:id="welcomeBox" alignment="CENTER" spacing="24" styleClass="card welcome-card" visible="false">
                     <Label styleClass="welcome-title" text="Welcome to the club!" />
                     <Label styleClass="welcome-message" text="Please visit the club's administration desk to complete your registration." textAlignment="CENTER" wrapText="true" />
