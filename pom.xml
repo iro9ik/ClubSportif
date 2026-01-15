@@ -63,32 +63,28 @@
             <version>3.6.0</version>
         </dependency>
 
-        <!-- Jakarta WebSocket API -->
-        <dependency>
-            <groupId>jakarta.websocket</groupId>
-            <artifactId>jakarta.websocket-api</artifactId>
-            <version>2.1.1</version>
-        </dependency>
-
-        <!-- Tyrus WebSocket Server -->
-        <dependency>
-            <groupId>org.glassfish.tyrus</groupId>
-            <artifactId>tyrus-server</artifactId>
-            <version>2.1.4</version>
-        </dependency>
-
-        <!-- Tyrus Grizzly Container (HTTP Server) -->
-        <dependency>
-            <groupId>org.glassfish.tyrus</groupId>
-            <artifactId>tyrus-container-grizzly-server</artifactId>
-            <version>2.1.4</version>
-        </dependency>
-
-        <!-- Tyrus Standalone Client -->
+        <!-- Tyrus Standalone Client (includes jakarta.websocket) -->
         <dependency>
             <groupId>org.glassfish.tyrus.bundles</groupId>
             <artifactId>tyrus-standalone-client</artifactId>
             <version>2.1.4</version>
+        </dependency>
+
+        <!-- Tyrus Grizzly Container for Server -->
+        <dependency>
+            <groupId>org.glassfish.tyrus</groupId>
+            <artifactId>tyrus-container-grizzly-server</artifactId>
+            <version>2.1.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>jakarta.websocket</groupId>
+                    <artifactId>jakarta.websocket-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>jakarta.websocket</groupId>
+                    <artifactId>jakarta.websocket-client-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- Gson for JSON serialization -->

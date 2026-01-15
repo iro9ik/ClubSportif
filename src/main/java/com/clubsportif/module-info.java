@@ -7,10 +7,8 @@ module com.clubsportif {
     requires reactor.core;
     requires org.reactivestreams;
     
-    // WebSocket
+    // WebSocket (tyrus-standalone-client provides all)
     requires jakarta.websocket;
-    requires jakarta.websocket.client;
-    requires org.glassfish.tyrus.server;
     requires org.glassfish.tyrus.core;
     requires org.glassfish.tyrus.client;
     requires org.glassfish.tyrus.spi;

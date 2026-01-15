@@ -71,7 +71,7 @@ public class MemberController {
     }
 
     /**
-     * Initialize WebSocket client for real-time notifications.
+     * Initialize WebSocket client for real-time
      */
     private void initializeWebSocket(User user) {
         wsClient = new WebSocketClientService();
@@ -229,7 +229,7 @@ public class MemberController {
         };
     }
 
-    // New: Manage Plan -> opens dialog to choose a plan and send a request to admin
+    //choose a plan and send a request to admin
     @FXML
     public void openManagePlan() {
         Dialog<ButtonType> dialog = new Dialog<>();
@@ -287,7 +287,7 @@ public class MemberController {
                         // Use reactive DAO
                         reactiveRequestDAO.createRequest(req)
                             .doOnSuccess(v -> Platform.runLater(() -> {
-                                // Send WebSocket notification to admins
+                                // Send WebSocket notification to admin
                                 ClubServerEndpoint.notifyNewRequest(
                                     req.getId(),
                                     currentUser.getUsername(),
@@ -309,7 +309,7 @@ public class MemberController {
         });
     }
 
-    // New: Cancel Plan -> confirm, expire membership, update role, and return to home (visitor)
+
     @FXML
     public void confirmCancelPlan() {
         Dialog<ButtonType> dialog = new Dialog<>();
