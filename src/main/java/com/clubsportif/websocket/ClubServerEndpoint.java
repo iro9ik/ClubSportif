@@ -80,7 +80,6 @@ public class ClubServerEndpoint {
         System.out.println("[WebSocket] Registered: userId=" + userId + ", role=" + role);
     }
 
-    // ==================== Static broadcast methods ====================
 
     /**
      * Broadcast message to all connected clients.

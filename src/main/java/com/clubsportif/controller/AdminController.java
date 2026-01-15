@@ -717,7 +717,6 @@ public class AdminController {
 
     /**
      * Add subscription duration to a base date.
-     * This allows renewals to extend existing subscriptions.
      */
     private LocalDate addSubscriptionToDate(LocalDate baseDate, String subscription) {
         return switch (subscription) {
