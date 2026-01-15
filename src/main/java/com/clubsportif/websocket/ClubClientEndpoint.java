@@ -2,10 +2,7 @@ package com.clubsportif.websocket;
 
 import jakarta.websocket.*;
 
-/**
- * WebSocket client endpoint implementation.
- * Must be public class for Tyrus reflection access via module system.
- */
+
 @ClientEndpoint
 public class ClubClientEndpoint {
 
